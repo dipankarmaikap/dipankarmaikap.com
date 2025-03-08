@@ -1,9 +1,21 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "~/layouts/Layout.astro";
 import PostCard from "~/components/post/PostCard.astro";
+import Layout from "~/layouts/Layout.astro";
 import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
-const { paginatedPosts } = getPaginatedPosts(await getCollection("post"), 1);
+const params = Astro.params;
+const pageNo = parseInt(params.pageNo || "1");
+if (isNaN(pageNo) || pageNo < 1) {
+  return Astro.redirect("/404");
+}
+if (pageNo === 1) {
+  return Astro.redirect("/");
+}
+const posts = await getCollection("post");
+const { totalPages, paginatedPosts } = getPaginatedPosts(posts, pageNo);
+if (pageNo > totalPages) {
+  return Astro.redirect("/404");
+}
 ---
 
 <Layout>
