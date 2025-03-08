@@ -1,0 +1,64 @@
+---
+import { getEntry } from "astro:content";
+import { render, type CollectionEntry } from "astro:content";
+import { fburl, authorName, mySchema } from "~/utils/variables";
+interface Props {
+  hasPrev: boolean;
+  hasNext: boolean;
+  pageNo: number;
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+}
+const { hasPrev, hasNext, pageNo, title, description, path, image } =
+  Astro.props;
+const siteUrl = Astro.site || "https://dipankarmaikap.com";
+const fallbackImageUrl = "fallback_og.png";
+const canonicalUrl = path === "/" ? siteUrl : siteUrl + path + "/";
+const imageUrl = siteUrl + (image || fallbackImageUrl);
+const language = "en_US";
+const { "@context": _, ...author } = mySchema;
+
+const getPageUrl = (page: number) =>
+  `${siteUrl}${page === 1 ? "" : `page/${page}/`}`;
+---
+
+<!-- Primary SEO Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<!-- <meta name="keywords" content={post.data.tags.join(", ")} /> -->
+
+<!-- Open Graph (Facebook, LinkedIn, etc.) -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content={authorName} />
+<meta property="og:locale" content={language} />
+<meta property="og:type" content="website" />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter Metadata -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@maikap_dipankar" />
+<meta name="twitter:creator" content="@maikap_dipankar" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+
+<!-- Dublin Core Metadata (Not essential for SEO but useful for libraries and archives) -->
+<meta name="dc.title" content={title} />
+<meta name="dc.description" content={description} />
+<meta name="dc.relation" content={canonicalUrl} />
+<meta name="dc.source" content={siteUrl} />
+<meta name="dc.language" content={language} />
+
+<!-- Schema.org JSON-LD -->
+<!-- <script is:inline type="application/ld+json" set:html={articleJson} /> -->
+
+<!-- Paginated Links -->
+{hasPrev && <link rel="prev" href={getPageUrl(pageNo - 1)} />}
+{hasNext && <link rel="next" href={getPageUrl(pageNo + 1)} />}

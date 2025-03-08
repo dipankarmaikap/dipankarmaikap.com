@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Pagination from "~/components/Pagination.astro";
 import PostCard from "~/components/post/PostCard.astro";
+import ArchivePageMeta from "~/components/seo/ArchivePageMeta.astro";
 import Layout from "~/layouts/Layout.astro";
 import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
 const params = Astro.params;
@@ -23,6 +24,15 @@ if (pageNo > totalPages) {
 ---
 
 <Layout>
+  <ArchivePageMeta
+    slot="meta"
+    title=`Page ${pageNo} - Dipankar Maikap - Tech Blog & Developer Guides`
+    description="Explore in-depth tutorials, tech insights, and guides on JavaScript, React, Node.js, and more. Learn from Dipankar Maikap's experience!"
+    path=`page/${pageNo}`
+    {hasPrev}
+    {hasNext}
+    {pageNo}
+  />
   <section class="max-w-screen-md mx-auto px-4">
     <h1 class="text-5xl sm:text-6xl py-6 sm:py-10 font-bold">My Posts</h1>
     <ul class="flex flex-col gap-6 md:gap-8">
