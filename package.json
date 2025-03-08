@@ -1,7 +1,28 @@
 {
   "name": "dipankarmaikap.com",
-  "type": "module",
   "version": "0.0.1",
+  "private": true,
+  "description": "Personal website of Dipankar Maikap - Web Developer & DevRel Engineer.",
+  "author": {
+    "name": "Dipankar Maikap",
+    "url": "https://dipankarmaikap.com"
+  },
+  "keywords": [
+    "astro",
+    "personal website",
+    "developer portfolio",
+    "web development",
+    "tailwindcss"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dipankarmaikap/dipankarmaikap.com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dipankarmaikap/dipankarmaikap.com/issues"
+  },
+  "homepage": "https://dipankarmaikap.com",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
