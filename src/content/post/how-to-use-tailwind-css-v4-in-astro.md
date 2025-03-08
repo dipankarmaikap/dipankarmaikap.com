@@ -8,7 +8,7 @@ tags: ["web development", "Tailwind CSS", "Astro", "Tailwind Vite", "Vite"]
 category: web-development
 ---
 
-Tailwind CSS is a popular utility-first CSS framework that helps you build modern and responsive web designs efficiently. In this tutorial, we’ll walk through how to set up Tailwind CSS v4 in an Astro project using the `@tailwindcss/vite` plugin.
+[Tailwind CSS](https://tailwindcss.com/) is a popular utility-first CSS framework that helps you build modern and responsive web designs efficiently. In this tutorial, we’ll walk through how to set up Tailwind CSS v4 in an [Astro](https://astro.build/) project using the `@tailwindcss/vite` plugin.
 
 ## Install Tailwind CSS
 

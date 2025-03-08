@@ -3,10 +3,10 @@
   --font-serif: "serif";
 }
 .post a {
-  @apply text-blue-600;
+  @apply text-blue-600 underline;
 }
 .post code {
-  @apply bg-neutral-200 px-1 rounded;
+  @apply bg-neutral-200 px-1 rounded break-words;
 }
 .post pre {
   @apply p-4 rounded my-4;
