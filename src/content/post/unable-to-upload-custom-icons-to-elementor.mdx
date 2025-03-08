@@ -1,0 +1,78 @@
+---
+title: "Unable to upload custom icons to Elementor?"
+pubDate: "July 16 2020"
+updatedDate: "Feb 12 2025"
+description: "Unable to upload custom icons in Elementor? The issue might be a missing ZIP extension. Learn how to fix it and successfully upload your custom icons."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    "Elementor",
+    "WordPress",
+    "Custom Icons",
+    "Fontello",
+    "Web Development",
+    "WordPress Troubleshooting",
+  ]
+category: web-development
+---
+
+import ElementorSystemInfo from "~/assets/elementor-system-info.png";
+import EnableZipExtentation from "~/assets/emable-zip-extentation.png";
+import Picture from "~/components/Picture.astro";
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/prnX6b4vELQ"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen=""
+></iframe>
+
+Elementor is one of the most popular WordPress page builders. It offers FontAwesome icons, but in most projects, you only need a few icons. Using the entire FontAwesome library adds unnecessary CSS to your site.
+
+Elementor provides an option to use custom icons. The official Elementor YouTube channel has a video on this feature, which you can check out [here](https://youtu.be/qADy2f8DsWo).
+
+### The Issue: Unable to Upload Custom Icons
+
+When attempting to upload Fontello icons (such as a custom search icon), some users encounter upload failures. This issue is often mistaken for a plugin conflict, leading to unnecessary troubleshooting steps like deactivating plugins.
+
+If you're experiencing this problem, here’s the solution.
+
+### The Cause: Missing ZIP Extension
+
+This issue occurs because your web hosting does not have the ZIP extension enabled. To check whether your site has ZIP support:
+
+1. Log in to your WordPress admin panel.
+2. Navigate to **Elementor > System Info**.
+3. Look for the **ZIP Installed** status.
+
+<Picture
+  src={ElementorSystemInfo}
+  alt="Elementor System Info Screenshot! (FIG-01)"
+/>
+
+If it says **No**, your hosting lacks the required ZIP extension, preventing you
+from uploading custom icon ZIP files.
+
+### The Solution: Enable ZIP Extension in cPanel
+
+To resolve this, enable the ZIP extension via cPanel:
+
+1. Log in to your **cPanel**.
+2. Search for **Select PHP Version** in the top search bar and open it.
+3. Scroll down and find the **ZIP extension**.
+4. Enable it by checking the box.
+
+<Picture src={EnableZipExtentation} alt="Enable ZIP PHP Extensions! (FIG-02)" />
+Once enabled, go back to WordPress and check **Elementor > System Info**. If **ZIP
+Installed** now shows **Yes**, you should be able to upload custom icon ZIP files
+successfully.
+
+## Final Thoughts
+
+That’s it! If you were struggling with this issue, I hope this guide helped you fix it. If the ZIP extension is already enabled but you're still facing problems, I recommend watching Elementor’s official tutorial to ensure you’re following the correct steps.
+
+Stay safe and keep building amazing websites! 😀

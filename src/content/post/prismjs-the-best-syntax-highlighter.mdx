@@ -1,0 +1,93 @@
+---
+title: "How to Use Prism.js for Code Syntax Highlighting"
+pubDate: "July 19 2020"
+updatedDate: "Feb 20 2025"
+description: "Learn how to add Prism.js to your project for clean and readable code blocks. A step-by-step guide for beginners."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    "Prism.js syntax highlighter",
+    "code highlighting",
+    "Prism.js tutorial",
+    "add syntax highlighting",
+    "JavaScript code styling",
+  ]
+category: web-development
+---
+
+import PrismaConfig from "~/assets/prisma-config.png";
+import Picture from "~/components/Picture.astro";
+
+If you are writing a blog that contains code blocks, a syntax highlighter is essential. It makes your code look organized and easy to read. In this guide, I’ll explain how you can use Prism.js inside your project.
+
+## Why Use Prism.js?
+
+- Lightweight and fast
+- Customizable themes
+- Supports multiple programming languages
+- Plugin support for extended functionality
+
+## Downloading Prism.js
+
+If you are working on a complex project, you can use npm to install Prism.js:
+
+```sh
+npm install prismjs
+```
+
+However, for most projects, a manual setup is simpler and easier to manage.
+
+### Steps to Download Prism.js Manually:
+
+1. Visit the [Prism.js download page](https://prismjs.com/download.html).
+2. Select a theme of your choice.
+3. Choose the languages you need.
+4. Select any additional plugins if needed.
+5. Download the CSS and JS files.
+
+Prism.js provides a modular approach, allowing you to include only what you need, keeping the file size minimal.
+
+<Picture src={PrismaConfig} alt="My Prismjs configs" />
+
+## Adding Prism.js to Your Project
+
+Once you’ve downloaded the required files, add them to your project:
+
+### Link the CSS file inside the `<head>` tag:
+
+```html
+<link rel="stylesheet" href="path-to/prism.css" />
+```
+
+### Link the JS file before the closing `<body>` tag:
+
+```html
+<script src="path-to/prism.js"></script>
+```
+
+## How to Use Prism.js
+
+After adding the CSS and JS files, you can use Prism.js by adding a class to your `<code>` blocks. Example:
+
+```html
+<code class="language-html">
+  <i id="toggle_theme_button" aria-hidden="true" class=""></i>
+</code>
+```
+
+## Language Support
+
+For different programming languages, use the appropriate class:
+
+- **HTML** → `language-html`
+- **JavaScript** → `language-js`
+- **CSS** → `language-css`
+- **Python** → `language-python`
+
+If you use an unsupported class or didn’t select a language when downloading Prism.js, the code block will not be highlighted properly.
+
+## Conclusion
+
+Prism.js is a powerful and easy-to-use syntax highlighter that enhances the readability of your code snippets. By following these simple steps, you can quickly integrate it into your project.

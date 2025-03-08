@@ -1,0 +1,95 @@
+---
+title: "How to Work with Absolute Path Imports in Gatsby"
+pubDate: "February 8, 2022"
+updatedDate: "Feb 20 2025"
+description: "Learn how to set up absolute path imports in Gatsby using Webpack configuration and JS/TS config files. Improve your development experience and enable VS Code's Go to Definition feature."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    "Gatsby",
+    "Webpack",
+    "Absolute Imports",
+    "JSConfig",
+    "TSConfig",
+    "Path Alias",
+    "VS Code",
+  ]
+
+category: web-development
+---
+
+import Gotodefination from "~/assets/Go-to-defination.webp";
+import GotodefinationWorking from "~/assets/Go-to-defination-working.webp";
+
+import Picture from "~/components/Picture.astro";
+
+While working on a Gatsby project, I found setting up absolute path imports slightly complicated. I prefer using the `~/` tilde notation for absolute imports over relative paths.
+
+### Example:
+
+```js
+import Component from "~/components/Component"; // Absolute import
+vs.
+import Component from "../../../../components/Component"; // Relative import
+```
+
+Here’s how I made it work.
+
+## Adding a Custom Webpack Config
+
+Gatsby provides plugins for this, but they often don’t work well with VS Code’s "Go to Definition." Instead, you can configure Webpack manually in `gatsby-node.js`:
+
+```js
+const path = require("path");
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      alias: {
+        "~": path.resolve(__dirname, "src/"),
+      },
+      extensions: [".ts", ".tsx", ".js", ".jsx"],
+    },
+  });
+};
+```
+
+Now, you can import files like this:
+
+```js
+import Header from "~/components/layout/Header";
+```
+
+### Issue: VS Code "Go to Definition" Doesn't Work
+
+Even with Webpack aliasing, VS Code may not recognize the paths, making navigation difficult.
+
+<Picture src={Gotodefination} alt="VS codes Go to Definition do not work" />
+
+## Fixing VS Code Path Resolution
+
+To fix this, add a `tsconfig.json` (for TypeScript) or `jsconfig.json` (for JavaScript) in the root of your project:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  }
+}
+```
+
+### Result: VS Code "Go to Definition" Now Works
+
+With this setup, pressing `Ctrl + Click` on a component or function will navigate to the correct file.
+
+<Picture
+  src={GotodefinationWorking}
+  alt="VS codes Go to Definition working now"
+/>
+
+Feel free to reach out if you have any questions!

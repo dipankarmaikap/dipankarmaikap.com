@@ -1,0 +1,11 @@
+---
+interface Props {
+  block: any;
+}
+
+const { block } = Astro.props;
+---
+
+<p>
+  {block.code.rich_text.map((text: any) => <pre>{text.plain_text}</pre>)}
+</p>

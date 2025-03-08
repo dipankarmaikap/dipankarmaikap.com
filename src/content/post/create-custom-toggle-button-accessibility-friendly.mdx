@@ -1,0 +1,161 @@
+---
+title: "Create an Accessible Custom Toggle Button with HTML, CSS, and JavaScript"
+pubDate: "August 10 2020"
+updatedDate: "Feb 20 2025"
+description: "Learn how to create a custom toggle button that is fully accessible, keyboard-friendly, and easy to implement using HTML, CSS, and JavaScript."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    accessible toggle button,
+    custom toggle switch,
+    JavaScript toggle button,
+    keyboard-friendly toggle,
+    HTML CSS toggle,
+    aria-checked toggle,
+    UI accessibility,
+  ]
+category: web-development
+---
+
+import ToggleButton from "~/assets/custom-toggle-button.webp";
+
+import Picture from "~/components/Picture.astro";
+
+<Picture src={ToggleButton} alt="Custom toggle button" />
+
+In this blog, we are going to create a custom toggle button with accessibility features to ensure a great experience for all users.
+
+You can find all the code in [my GitHub ](http://github.com/dipankarmaikap/custom-toggle-button) and feel free to use it.
+
+## Steps to Create the Toggle Button:
+
+1. Design the toggle button
+2. Add JavaScript to make the button functional
+3. Make the button keyboard accessible
+
+## HTML Structure
+
+```html
+<div
+  id="toggle-container"
+  class="toggle-container"
+  role="checkbox"
+  aria-checked="false"
+  tabindex="0"
+>
+  <div id="toggle-button" class="toggle-button">
+    <p>Turn <span id="toggle-button-text" class="dynamic-text">On</span></p>
+  </div>
+  <p id="toggle-container-text">Off</p>
+</div>
+```
+
+**Explanation:**
+
+- The outer `div` (`toggle-container`) acts as the container for the toggle button.
+- Attributes like `role="checkbox"`, `aria-checked`, and `tabindex` enhance accessibility.
+- The inner `div` (`toggle-button`) functions as the actual button.
+- The text inside `p` tags will change based on the toggle state.
+
+## CSS Styling
+
+In this section, we define the styles for the toggle button and its container. We use CSS to control the layout, colors, and the visual state changes when toggled.
+
+```css
+.toggle-container {
+  user-select: none;
+  cursor: default;
+  background: rgb(173, 173, 173);
+  width: 50px;
+  height: 100px;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  padding: 2px;
+}
+.toggle-button {
+  background: white;
+  width: 50px;
+  height: 50px;
+  order: 1;
+  font-size: 13px;
+  text-align: center;
+}
+.dynamic-text {
+  display: block;
+}
+.toggle-button.toggle-button-active {
+  order: 0;
+  color: black;
+}
+.toggle-container.toggle-container-active {
+  background-color: rgb(16, 121, 190);
+  color: white;
+}
+```
+
+## JavaScript Functionality
+
+In this section, we will add JavaScript to handle the toggle functionality. This ensures that when users click on the button, it changes state and updates the UI accordingly.
+
+```js
+var initialState = false;
+var toggleContainer = document.getElementById("toggle-container");
+var toggleButton = document.getElementById("toggle-button");
+var toggleContainerText = document.getElementById("toggle-container-text");
+var toggleButtonText = document.getElementById("toggle-button-text");
+
+toggleContainer.addEventListener("click", handleClick);
+
+function handleClick() {
+  initialState = !initialState;
+  toggleContainer.classList.toggle("toggle-container-active");
+  toggleButton.classList.toggle("toggle-button-active");
+  if (initialState) {
+    toggleContainerText.innerHTML = "On";
+    toggleButtonText.innerHTML = "Off";
+    toggleContainer.setAttribute("aria-checked", "true");
+  } else {
+    toggleContainerText.innerHTML = "Off";
+    toggleButtonText.innerHTML = "On";
+    toggleContainer.setAttribute("aria-checked", "false");
+  }
+}
+```
+
+## Making It Keyboard Accessible
+
+To improve accessibility, we need to ensure that users who navigate using a keyboard can interact with the toggle button.
+We do this by listening for key events like `Spacebar` and `Enter`.
+This allows users who rely on keyboards to toggle the button without using a mouse.
+
+```js
+toggleContainer.addEventListener("keydown", handleKeydown);
+
+function handleKeydown(event) {
+  var flag = false;
+  switch (event.keyCode) {
+    case 32: // Spacebar
+    case 13: // Enter
+      handleClick();
+      flag = true;
+      break;
+    default:
+      break;
+  }
+  if (flag) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+}
+```
+
+## Conclusion
+
+Now you have a fully functional and accessibility-friendly toggle button that responds to both clicks and keyboard interactions. This follows best practices for accessibility, ensuring a better user experience for all.
+
+For more best practices, check out [w3.org](https://www.w3.org/) and for key codes, visit [keycode.info](https://keycode.info/).
+
+Stay safe and keep your surroundings clean! 🙂

@@ -1,0 +1,336 @@
+---
+title: "Generating a Dynamic Sitemap for a Headless WordPress + Next.js Site"
+pubDate: "April 17, 2022"
+updatedDate: "Feb 12 2025"
+description: "Learn how to generate a dynamic XML sitemap for your headless WordPress site using Next.js. Improve SEO, enhance search engine indexing, and automate sitemap updates effortlessly."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    "Next.js sitemap",
+    "WordPress headless CMS",
+    "SEO optimization",
+    "XML sitemap generation",
+    "Next.js SEO",
+    "dynamic sitemap Next.js",
+    "WordPress API sitemap",
+    "generate sitemap in Next.js",
+    "headless WordPress tutorial",
+    "Next.js headless WordPress",
+  ]
+category: wordpress
+---
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/Gme28_ZvcqA"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen=""
+></iframe>
+
+In this tutorial, you’ll learn how to create a dynamic XML sitemap for your headless WordPress site using Next.js. This guide will focus solely on generating the sitemap. If you're looking for a full headless WordPress setup, check out [Jeff Everhart’s tutorial](https://wpengine.com/builders/build-simple-headless-wordpress-app-next-js-wpgraphql/).
+
+## What You Need to Create a Sitemap
+
+A sitemap is an XML file that lists all the URLs on your website to help search engines index your site efficiently. Here’s a basic example:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://www.example.com/foo.html</loc>
+    <lastmod>2018-06-04</lastmod>
+  </url>
+</urlset>
+```
+
+For more details, check the [Sitemap Protocol](https://www.sitemaps.org/protocol.html).
+
+## Understanding Sitemap Indexing
+
+Your WordPress site likely contains multiple content types such as posts, pages, categories, and tags. If you have more than 1,000 items of any type, you should create multiple sitemap pages.
+
+For example, if your site has:
+
+- 2,000 posts
+- 100 categories
+- 600 tags
+- 10 pages
+
+Your sitemap index should look like this:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>http://www.example.com/sitemap/post_sitemap1.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>http://www.example.com/sitemap/post_sitemap2.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>http://www.example.com/sitemap/category_sitemap1.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>http://www.example.com/sitemap/tag_sitemap1.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>http://www.example.com/sitemap/page_sitemap1.xml</loc>
+  </sitemap>
+</sitemapindex>
+```
+
+## Configuring Your WordPress Site
+
+To retrieve sitemap data from WordPress, install the [**WP Sitemap REST API Plugin**](https://github.com/dipankarmaikap/wp-sitemap-rest-api) from GitHub. This plugin adds the following API endpoints:
+
+- `/wp-json/sitemap/v1/totalpages`
+- `/wp-json/sitemap/v1/author?pageNo=1&perPage=1000`
+- `/wp-json/sitemap/v1/taxonomy?pageNo=1&perPage=1000&taxonomyType=category or tag`
+- `/wp-json/sitemap/v1/posts?pageNo=1&perPage=1000&postType=post or page`
+
+## Creating a Sitemap Index Page in Next.js
+
+In your Next.js project, create a new file at `pages/sitemap.xml.js`:
+
+```javascript
+import getSitemapPages from "~/utils/getSitemapPages";
+import getTotalCounts from "~/lib/getTotalCounts";
+
+export default function SitemapIndexPage() {
+  return null;
+}
+
+export async function getServerSideProps({ res }) {
+  const details = await getTotalCounts();
+
+  let sitemapIndex = `<?xml version='1.0' encoding='UTF-8'?>
+  <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     ${details.map((item) => getSitemapPages(item)).join("")}
+  </sitemapindex>`;
+
+  res.setHeader("Content-Type", "text/xml; charset=utf-8");
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=600, stale-while-revalidate=600"
+  );
+  res.write(sitemapIndex);
+  res.end();
+
+  return { props: {} };
+}
+```
+
+As you can see in the above code, this will be an SSR page since we want it to be a dynamic sitemap. Let’s take a look at how the two main functions work.
+
+### Fetching Total Counts `getTotalCounts()`
+
+```javascript
+import axios from "axios";
+import { wordpressUrl } from "~/utils/variables";
+
+export default async function getTotalCounts() {
+  const res = await axios.get(`${wordpressUrl}/wp-json/sitemap/v1/totalpages`);
+  let data = await res.data;
+  if (!data) return [];
+  const propertyNames = Object.keys(data);
+  let excludeItems = ["user"];
+  //if you want to remove any item from sitemap, add it to excludeItems array
+  let totalArray = propertyNames
+    .filter((name) => !excludeItems.includes(name))
+    .map((name) => {
+      return { name, total: data[name] };
+    });
+
+  return totalArray;
+}
+```
+
+This is a simple fetch function that retrieves the total number of pages, posts, custom posts, users, etc., on your WordPress site.
+The returned data is an array containing the name and total count of each item. If you want to exclude any item from the sitemap, you can add it to the `excludeItems` array. For example, I have excluded users.
+
+### Generating Sitemap Pages `getSitemapPages()`
+
+```javascript
+import { frontendUrl, sitemapPerPage } from "./variables";
+
+export default function getSitemapPages(item) {
+  const items = [];
+  for (let i = 1; i <= Math.ceil(item.total / sitemapPerPage); i++) {
+    let url = `${frontendUrl}/sitemap/${item.name}_sitemap${i}.xml`;
+    items.push(
+      ` 
+        <sitemap>
+           <loc>
+              ${url}
+          </loc>
+      </sitemap>
+      `
+    );
+  }
+  return items.join("");
+}
+```
+
+This function receives the array item returned by the `getTotalCounts` function. It contains the total number of URLs and the corresponding slug name and returns the number of pages needed for this type.
+Let’s look at two examples to better understand how it works.
+
+```javascript
+await getSitemapPages({ name: "post", total: 1 });
+
+{
+  /* <sitemap>
+<loc>http://www.example.com/sitemap/post_sitemap1.xml</loc>
+</sitemap>
+ */
+}
+
+await getSitemapPages({ name: "tag", total: 2300 });
+
+{
+  /* <sitemap>
+<loc>http://www.example.com/sitemap/tag_sitemap1.xml</loc>
+</sitemap>
+<sitemap>
+<loc>http://www.example.com/sitemap/tag_sitemap2.xml</loc>
+</sitemap>
+<sitemap>
+<loc>http://www.example.com/sitemap/tag_sitemap3.xml</loc>
+</sitemap> */
+}
+```
+
+Now that our index sitemap is complete, let’s see how we can generate all the individual sitemap pages.
+You can view a [live example of the site here](https://nextjs-wordpress-ashen.vercel.app/sitemap.xml).
+
+## Creating Individual Sitemap Pages
+
+In your `pages` folder, create a file named `[slug].js` inside the `sitemap` folder: `pages/sitemap/[slug].js`.
+
+```javascript
+import getSitemapPageUrls from "~/lib/getSitemapPageUrls";
+import getTotalCounts from "~/lib/getTotalCounts";
+import generateSitemapPaths from "~/utils/generateSitemapPaths";
+export default function SitemapTagPage() {
+  return null;
+}
+export async function getServerSideProps({ res, params: { slug } }) {
+  let isXml = slug.endsWith(".xml");
+  if (!isXml) {
+    return {
+      notFound: true,
+    };
+  }
+  let slugArray = slug.replace(".xml", "").split("_");
+  let type = slugArray[0];
+  let pageNo = slugArray[1]?.match(/(\d+)/)[0] ?? null;
+  let page = pageNo ? parseInt(pageNo) : null;
+  let possibleTypes = await getTotalCounts();
+  if (!possibleTypes.some((e) => e.name === type)) {
+    return {
+      notFound: true,
+    };
+  }
+  let pageUrls = await getSitemapPageUrls({ type, page });
+  if (!pageUrls?.length) {
+    return {
+      notFound: true,
+    };
+  }
+  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    ${generateSitemapPaths(pageUrls)}
+  </urlset>`;
+  res.setHeader("Content-Type", "text/xml; charset=utf-8");
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=600, stale-while-revalidate=600"
+  );
+  res.write(sitemap);
+  res.end();
+  return { props: {} };
+}
+```
+
+If you're familiar with Next.js dynamic routes, `[slug].js` will capture the slug from the URL that the user visits.
+
+For example, if you visit `/sitemap/post_sitemap1.xml`, how can you extract the page type and page number from this string (`post_sitemap1.xml`)?
+
+You can split the string into an array using `_` as the separator. The first element of the array will be the page type, while the last element contains the page number. You can easily extract this number using a simple regular expression.
+
+Next, you should validate the extracted values to ensure they follow the sitemap index page’s URL pattern. If they don’t, return a 404 page.
+
+### Fetching Sitemap Page URLs `getSitemapPageUrls()`
+
+```javascript
+import axios from "axios";
+import { sitemapPerPage, wordpressUrl } from "~/utils/variables";
+
+export default async function getSitemapPageUrls({ type, page }) {
+  if (type === "category" || type === "tag") {
+    const res = await axios.get(
+      `${wordpressUrl}/wp-json/sitemap/v1/taxonomy?pageNo=${page}&taxonomyType=${type}&perPage=${sitemapPerPage}`
+    );
+    return (await res?.data) ?? [];
+  }
+  if (type === "user") {
+    const res = await axios.get(
+      `${wordpressUrl}/wp-json/sitemap/v1/author?pageNo=${page}&perPage=${sitemapPerPage}`
+    );
+    return (await res?.data) ?? [];
+  }
+
+  const res = await axios.get(
+    `${wordpressUrl}/wp-json/sitemap/v1/posts?pageNo=${page}&postType=${type}&perPage=${sitemapPerPage}`
+  );
+  return (await res?.data) ?? [];
+}
+```
+
+Let’s see how the `getSitemapPageUrls` function works. It takes an object with two properties, `{ type, page }`, as a parameter.
+
+Based on our previous example, the `type` would be `post`, and the `page` would be `1`. This should trigger a fetch request to the following route:
+
+```json
+/wp-json/sitemap/v1/posts?pageNo=1&postType=post&perPage=1000
+```
+
+Once we retrieve the URLs for any page type, we need to generate the paths. For this, we use the `generateSitemapPaths` function. Let’s take a look at how it works.
+
+### Generating Sitemap Paths `generateSitemapPaths()`
+
+```javascript
+import { frontendUrl } from "./variables";
+
+export default function generateSitemapPaths(array) {
+  const items = array.map(
+    (item) =>
+      `
+            <url>
+                <loc>${frontendUrl + item?.url}</loc>
+                ${
+                  item?.post_modified_date
+                    ? `<lastmod>${
+                        new Date(item?.post_modified_date)
+                          .toISOString()
+                          .split("T")[0]
+                      }</lastmod>`
+                    : ""
+                }
+            </url>
+            `
+  );
+  return items.join("");
+}
+```
+
+This function receives an array of objects containing `url` and `post_modified_date`, then returns an XML string representation of the data.
+
+## Conclusion
+
+By following this guide, you can dynamically generate an XML sitemap for your headless WordPress site using Next.js, improving your SEO performance and search engine indexing.

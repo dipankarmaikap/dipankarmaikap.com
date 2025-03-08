@@ -1,0 +1,187 @@
+---
+title: "Design a serverless REST API – IBM cloud functions and cloudant"
+pubDate: "December 7, 2020"
+description: "Learn how to build a serverless REST API with IBM Cloud Functions and Cloudant. This step-by-step guide covers creating, deploying, and managing a to-do list application."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    "Serverless API",
+    "IBM Cloud Functions",
+    "Cloudant Database",
+    "REST API",
+    "Node.js",
+    "Cloud Computing",
+    "Backend Development",
+    "Web Development",
+    "API Design",
+    "NoSQL",
+  ]
+category: web-development
+---
+
+In this tutorial, we'll create a serverless web application using IBM Cloud™ Functions and Cloudant. Our REST API will serve as a simple to-do list, allowing users to view, add, edit, and delete tasks.
+
+## Objectives
+
+- Deploy a serverless backend and a database
+- Create actions for different tasks:
+  - Add a to-do
+  - View to-dos
+  - Edit a to-do
+  - Delete a to-do
+- Expose a REST API for all actions
+
+If you prefer a video tutorial, you can watch [this video](https://youtu.be/bFbO1Pw_I_Y?si=iXfG3cPerz8xxZtl) or continue reading.
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/bFbO1Pw_I_Y"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen=""
+></iframe>
+
+You can follow their [official tutorial](https://cloud.ibm.com/docs/solution-tutorials?topic=solution-tutorials-serverless-api-webapp) on creating a REST API. This tutorial is a good starting point if you are just trying out.
+
+## Prerequisites
+
+You need an IBM Cloud account. If you don’t have one, you can [register here](https://cloud.ibm.com/registration). The Lite account is free and does not require a credit card.
+
+## Step 1: Create a Database
+
+1. Log in to IBM Cloud and go to the **Catalog**.
+2. Search for **Cloudant** under Databases and select it.
+3. Configure the Cloudant instance:
+   - Choose a region (e.g., **Chennai** or one nearest to you).
+   - Set a unique name (e.g., `Cloudant-todolist`).
+   - Choose the **Lite** plan.
+4. Click **Create** and wait for the instance to become active.
+5. Navigate to **Service Credentials** on the left menu and click **New Credential**:
+   - Name: `for-todolist`
+   - Role: Manager
+   - Click **Add**
+6. Click **Launch Dashboard** to access Cloudant.
+7. Click **Create Database**:
+   - Name: `todolist`
+   - Partitioning: **Non-Partitioned**
+
+## Step 2: Create Serverless Actions
+
+We will create serverless actions to manage the to-do list.
+
+### Add To-Do Action
+
+1. Go to **Functions** > **Actions** > **Create Action**.
+2. Set the name as `prepare-entry-for-save`.
+3. Create a package named `todolist`.
+4. Select **Node.js** as the runtime.
+5. Replace the default code with:
+
+```javascript
+function main(params) {
+  if (!params.name) {
+    return Promise.reject({ error: "No name provided" });
+  }
+  return {
+    doc: {
+      createdAt: new Date(),
+      name: params.name,
+      completed: false,
+    },
+  };
+}
+```
+
+6. Click **Save**.
+7. Click **Enclosing Sequences** > **Add to Sequence**.
+8. Set sequence name as `save-todo-to-sequence` and choose `todolist` as the package.
+9. Click **Create and Add**.
+
+### Retrieve To-Dos Action
+
+1. Create a new action named `set-read-input` under the `todolist` package.
+2. Replace the default code with:
+
+```javascript
+function main(params) {
+  return { params: { include_docs: true } };
+}
+```
+
+3. Click **Save**.
+4. Follow similar steps to add a sequence named `read-todolist-entries-sequence`.
+5. Add **Cloudant's** `list-documents` action using the previously created `binding-for-todolist`.
+6. Create a new action `format-entries`, replace the default code with:
+
+```javascript
+function main(params) {
+  return {
+    entries: params.rows.map((row) => ({
+      name: row.doc.name,
+      completed: row.doc.completed,
+      _id: row.doc._id,
+      _rev: row.doc._rev,
+      createdAt: row.doc.createdAt,
+    })),
+  };
+}
+```
+
+7. Click **Save**.
+
+### Edit To-Do Action
+
+1. Create a new action `update-todo-item` under `todolist`.
+2. Replace the code with:
+
+```javascript
+function main(params) {
+  if (!params.doc) {
+    return Promise.reject({ error: "No document provided" });
+  }
+  return { doc: { ...params.doc, createdAt: new Date() } };
+}
+```
+
+3. Click **Save**.
+4. Create a sequence `update-todo-entry-sequence` and link **Cloudant's** `update-documents` action.
+
+### Delete To-Do Action
+
+1. Create an action `delete-todo-item` under `todolist`.
+2. Replace the code with:
+
+```javascript
+function main(params) {
+  if (!params.docid || !params.docrev) {
+    return Promise.reject({ error: "docid and docrev are required" });
+  }
+  return { docid: params.docid, docrev: params.docrev };
+}
+```
+
+3. Click **Save**.
+4. Create a sequence `delete-todo-entry-from-sequence` and link **Cloudant's** `delete-documents` action.
+
+## Step 3: Create an API
+
+1. Enable all four action sequences as **Web Actions**.
+2. Go to **APIs** > **Create API**.
+3. Set API name to `todolist` and base path to `/api`.
+4. Create operations for each sequence:
+   - **GET /entries** -> `read-todolist-entries-sequence`
+   - **PUT /entries** -> `save-todo-to-sequence`
+   - **PATCH /entries** -> `update-todo-entry-sequence`
+   - **DELETE /entries** -> `delete-todo-entry-from-sequence`
+5. Click **Create API** and note the API route.
+
+## My Thoughts on IBM Cloud
+
+As a self-taught web developer, I rely heavily on documentation. IBM Cloud lacks detailed documentation, making it harder for beginners. While complexity isn't an issue for developers, clear guides, code snippets, and small tutorials can significantly improve the experience.
+
+## Conclusion
+
+We've successfully created a serverless REST API using IBM Cloud Functions and Cloudant. This setup provides a scalable, cost-effective solution for a to-do list application. Try extending this by adding authentication or a frontend!

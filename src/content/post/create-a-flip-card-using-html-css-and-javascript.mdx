@@ -1,0 +1,90 @@
+---
+title: "Create a flip card using html css and javascript"
+pubDate: "July 17 2020"
+description: "Learn how to create a simple flip card using HTML, CSS, and JavaScript. This step-by-step guide explains how to toggle between elements using JavaScript."
+image:
+  url: "/cover-image.webp"
+  alt: "A representative cover image for the article."
+tags:
+  [
+    "Flip Card",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "UI Design",
+    "Frontend Development",
+  ]
+category: web-development
+---
+
+import flipcardGif from "~/assets/Flip_box.gif";
+
+import Picture from "~/components/Picture.astro";
+
+<Picture src={flipcardGif} alt="Flip Card image gif." />
+
+In today’s blog, I’ll show you how to create a simple flip card using HTML, CSS, and a few lines of JavaScript.
+
+Flip cards are quite popular in modern web design. Understanding the core concept behind them allows you to create various interactive UI components using minimal code.
+
+## The Core Concept
+
+How can we toggle between two classes on a button click? Imagine having two same-sized cards with different content—one should be visible while the other remains hidden. When a user clicks a button, the first card should be hidden, and the second card should appear.
+
+## The Solution
+
+JavaScript provides a simple way to toggle visibility using CSS class manipulation. We can define a `.hidden` class with `display: none;`, and then dynamically add or remove it based on user interactions.
+
+## Code Implementation
+
+<iframe
+  height="500"
+  style="width: 100%;"
+  scrolling="no"
+  title="Profile FlipBox"
+  src="https://codepen.io/dipankarmaikap/embed/OJyEqpg?default-tab=html%2Cresult"
+  frameborder="no"
+  loading="lazy"
+  allowtransparency="true"
+  allowfullscreen="true"
+>
+  See the Pen{" "}
+  <a href="https://codepen.io/dipankarmaikap/pen/OJyEqpg">Profile FlipBox</a> by
+  Dipankar Maikap (
+  <a href="https://codepen.io/dipankarmaikap">@dipankarmaikap</a>) on{" "}
+  <a href="https://codepen.io">CodePen</a>.
+</iframe>
+### 1. Select Elements
+
+We first need to select both card containers and the buttons using their respective IDs.
+
+```javascript
+var rightArrow = document.getElementById("arrow_button");
+var topCard = document.getElementById("cover_image");
+var bottomCard = document.getElementById("detail_content");
+var followButton = document.getElementById("follow_button");
+```
+
+### 2. Add Event Listeners
+
+We’ll attach event listeners to the buttons and toggle the `.hidden` class accordingly.
+
+```javascript
+rightArrow.addEventListener("click", function () {
+  topCard.classList.add("hidden");
+  bottomCard.classList.remove("hidden");
+  console.log("Hiding top card and showing bottom card.");
+});
+
+followButton.addEventListener("click", function () {
+  topCard.classList.remove("hidden");
+  bottomCard.classList.add("hidden");
+  console.log("Hiding bottom card and showing top card.");
+});
+```
+
+### Final Thoughts
+
+That’s it! With just a few lines of JavaScript, we’ve built a simple flip card. More importantly, you now understand how to dynamically add and remove classes using JavaScript, which can be applied to many other interactive UI elements.
+
+Stay safe and happy coding! 🙂

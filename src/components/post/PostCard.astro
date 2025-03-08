@@ -1,0 +1,32 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+import FormattedDate from "~/components/FormattedDate.astro";
+interface Props {
+  post: CollectionEntry<"post">;
+}
+const { post } = Astro.props;
+const { remarkPluginFrontmatter } = await render(post);
+---
+
+<article>
+  <h2 class="leading-tight text-3xl md:text-4xl font-semibold">
+    <a class="hover:text-blue-600 hover:underline" href={`/${post.id}/`}>
+      {post.data.title}
+    </a>
+  </h2>
+  <div class="flex items-center text-gray-600 gap-1">
+    <FormattedDate date={post.data.pubDate} />
+    <span>-</span>
+    <p>
+      {remarkPluginFrontmatter?.minutesRead}
+    </p>
+  </div>
+  <p class="text-xl my-2">{post.data.description}</p>
+  <a
+    class="text-blue-600 hover:text-blue-700 inline-block hover:underline"
+    href={`/${post.id}/`}
+  >
+    Read More »
+  </a>
+</article>
