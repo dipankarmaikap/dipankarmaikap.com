@@ -2,8 +2,8 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
-import node from "@astrojs/node";
 import { remarkReadingTime } from "./remark-reading-time.mjs";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,7 +16,5 @@ export default defineConfig({
   },
   output: "server",
   integrations: [mdx()],
-  adapter: node({
-    mode: "standalone",
-  }),
+  adapter: vercel(),
 });
