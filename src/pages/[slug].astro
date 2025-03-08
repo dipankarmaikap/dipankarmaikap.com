@@ -4,6 +4,7 @@ import { getEntry } from "astro:content";
 import { render } from "astro:content";
 import PostMetadata from "~/components/seo/PostMetadata.astro";
 import FormattedDate from "~/components/FormattedDate.astro";
+import AuthorBio from "~/components/post/AuthorBio.astro";
 const params = Astro.params;
 const { slug } = params;
 if (slug === undefined) {
@@ -32,5 +33,8 @@ const { Content, remarkPluginFrontmatter } = await render(post);
       </h1>
     </header>
     <Content />
+    <footer>
+      <AuthorBio />
+    </footer>
   </article>
 </Layout>
