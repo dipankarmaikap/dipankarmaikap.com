@@ -3,9 +3,7 @@ title: "How to add an RSS feed to your Next.js WordPress site"
 pubDate: "April 28, 2021"
 updatedDate: "Feb 12 2025"
 description: "Learn how to generate an RSS feed for your Next.js WordPress site using Server-Side Rendering (SSR). Improve content distribution and SEO with dynamic RSS feeds and caching for better performance."
-image:
-  url: "/cover-image.webp"
-  alt: "A representative cover image for the article."
+image: "cover-image.webp"
 tags:
   [
     "Next.js",

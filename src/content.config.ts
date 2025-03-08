@@ -21,12 +21,7 @@ const post = defineCollection({
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    image: z
-      .object({
-        url: z.string(),
-        alt: z.string(),
-      })
-      .optional(),
+    image: z.string().optional(),
     tags: z.array(z.string()).nonempty(),
     category: z
       .string()

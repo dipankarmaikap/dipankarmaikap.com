@@ -3,9 +3,7 @@ title: "How to create a scroll progressbar"
 pubDate: "November 27 2020"
 updatedDate: "Feb 26 2025"
 description: "Learn how to create a scroll progress bar using JavaScript and CSS. Track scroll percentage and update a progress bar dynamically."
-image:
-  url: "/cover-image.webp"
-  alt: "A representative cover image for the article."
+image: "cover-image.webp"
 tags:
   [
     "scroll progress bar",

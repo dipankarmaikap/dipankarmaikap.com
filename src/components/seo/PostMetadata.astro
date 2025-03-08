@@ -1,4 +1,5 @@
 ---
+import { getEntry } from "astro:content";
 import { render, type CollectionEntry } from "astro:content";
 import { fburl, authorName, mySchema } from "~/utils/variables";
 interface Props {
@@ -6,20 +7,19 @@ interface Props {
 }
 const { post } = Astro.props;
 const { remarkPluginFrontmatter } = await render(post);
-// console.log(post.rendered?.metadata);
-
 const siteUrl = Astro.site || "https://dipankarmaikap.com";
+const fallbackImageUrl = "fallback_og.png";
 const title = post.data.title;
 const description = post.data.description;
 const canonicalUrl = siteUrl + post.id + "/";
-const imageUrl = siteUrl + post.data?.image?.url;
-
+const imageUrl = siteUrl + (post.data?.image || fallbackImageUrl);
 const language = "en_US";
 const datePublished = post.data.pubDate.toISOString();
 const dateModified =
   post.data?.updatedDate?.toISOString() || post.data.pubDate.toISOString();
 const { "@context": _, ...author } = mySchema;
-console.log(remarkPluginFrontmatter);
+const category = await getEntry("category", post.data.category);
+const categoryName = category?.data.title || "Web Development";
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -46,13 +46,29 @@ const articleSchema = {
   url: canonicalUrl,
   datePublished: datePublished,
   dateModified: dateModified,
-  articleSection: "Web Development",
+  articleSection: categoryName,
   keywords: post.data.tags,
   wordCount: remarkPluginFrontmatter.words,
-  timeRequired: `PT${remarkPluginFrontmatter.minutes}M`, // Fixed format
+  timeRequired: `PT${remarkPluginFrontmatter.minutes}M`,
+  potentialAction: [
+    {
+      "@type": "ReadAction",
+      target: canonicalUrl,
+    },
+    {
+      "@type": "ShareAction",
+      target: [
+        `https://x.com/intent/tweet?url=${canonicalUrl}`,
+        `https://www.facebook.com/sharer/sharer.php?u=${canonicalUrl}`,
+        `https://www.linkedin.com/shareArticle?mini=true&url=${canonicalUrl}`,
+        `https://pinterest.com/pin/create/button/?url=${canonicalUrl}`,
+        `https://www.reddit.com/submit?url=${canonicalUrl}`,
+      ],
+    },
+  ],
 };
 
-const articleJson = JSON.stringify(articleSchema, null, 2)
+const articleJson = JSON.stringify(articleSchema);
 ---
 
 <!-- Primary SEO Meta Tags -->
@@ -75,7 +91,7 @@ const articleJson = JSON.stringify(articleSchema, null, 2)
 <!-- Article Metadata (Open Graph) -->
 <meta property="article:author" content={fburl} />
 <meta property="article:publisher" content={fburl} />
-<meta property="article:section" content="Web Development" />
+<meta property="article:section" content={categoryName} />
 <meta property="article:tag" content={post.data.tags.join(", ")} />
 <meta property="article:published_time" content={datePublished} />
 <meta property="article:modified_time" content={dateModified} />
@@ -104,5 +120,4 @@ const articleJson = JSON.stringify(articleSchema, null, 2)
 <meta name="dc.date.modified" content={dateModified} />
 
 <!-- Schema.org JSON-LD -->
-<script type="application/ld+json" set:html={articleJson}>
-</script>
+<script is:inline type="application/ld+json" set:html={articleJson} />

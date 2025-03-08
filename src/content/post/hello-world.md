@@ -3,9 +3,7 @@ title: "Hello, World!"
 pubDate: "July 15 2020"
 updatedDate: "Feb 12 2025"
 description: "Launching my web development blog! Sharing my coding journey, solutions to coding challenges, and insights on learning new technologies."
-image:
-  url: "/cover-image.webp"
-  alt: "A representative cover image for the article."
+image: "cover-image.webp"
 tags:
   [
     "web development",

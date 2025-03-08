@@ -3,9 +3,7 @@ title: "Fixing Next.js Build Error for Dynamic Routes with .html in URLs"
 pubDate: "June 8, 2021"
 updatedDate: "Feb 12 2025"
 description: "Learn how to fix Next.js build errors when handling dynamic routes with .html in URLs, ensuring SEO-friendly migration from WordPress."
-image:
-  url: "/cover-image.webp"
-  alt: "A representative cover image for the article."
+image: "cover-image.webp"
 tags:
   [
     "Next.js",

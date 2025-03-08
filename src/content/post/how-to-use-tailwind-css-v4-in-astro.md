@@ -3,9 +3,7 @@ title: "How to Use Tailwind CSS v4 in Astro"
 pubDate: "February 9, 2025"
 updatedDate: "Feb 12 2025"
 description: "Learn how to set up Tailwind CSS v4 in an Astro project using the @tailwindcss/vite plugin. Follow this step-by-step guide to integrate Tailwind."
-image:
-  url: "/cover-image.webp"
-  alt: "A representative cover image for the article."
+image: "cover-image.webp"
 tags: ["web development", "Tailwind CSS", "Astro", "Tailwind Vite", "Vite"]
 category: web-development
 ---

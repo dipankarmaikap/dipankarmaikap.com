@@ -3,9 +3,7 @@ title: "Headless WordPress and SEO"
 pubDate: "July 20, 2022"
 updatedDate: "Feb 12 2025"
 description: "Learn how to optimize SEO in a headless WordPress setup using WPGraphQL and Next.js. Discover how to fetch Yoast SEO data and integrate it seamlessly into your frontend."
-image:
-  url: "/cover-image.webp"
-  alt: "A representative cover image for the article."
+image: "cover-image.webp"
 tags:
   [
     "Headless WordPress",
