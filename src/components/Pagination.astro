@@ -1,0 +1,64 @@
+---
+import Next from "~/components/Next.astro";
+import Prev from "~/components/Prev.astro";
+interface Props {
+  hasPrev: boolean;
+  hasNext: boolean;
+  totalPages: number;
+  pageNo: number;
+}
+
+const { totalPages, hasNext, hasPrev, pageNo } = Astro.props;
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+const getPageHref = (page: number) => (page === 1 ? "/" : `/page/${page}/`);
+---
+
+<nav class="pagination py-8 text-2xl" aria-label="Pagination">
+  <h2 class="sr-only">Paginated Links</h2>
+  <div class="flex gap-2">
+    {
+      hasPrev ? (
+        <a
+          class="prev text-blue-600 hover:underline"
+          href={getPageHref(pageNo - 1)}
+        >
+          <Prev />
+        </a>
+      ) : (
+        <span class="prev">
+          <Prev />
+        </span>
+      )
+    }
+    {
+      pages.map((page) =>
+        pageNo === page ? (
+          <span aria-current="page" class="page-numbers current">
+            {page}
+          </span>
+        ) : (
+          <a
+            class="page-numbers text-blue-600 hover:underline"
+            href={getPageHref(page)}
+          >
+            {page}
+          </a>
+        )
+      )
+    }
+    {
+      hasNext ? (
+        <a
+          class="next text-blue-600 hover:underline"
+          href={getPageHref(pageNo + 1)}
+        >
+          <Next />
+        </a>
+      ) : (
+        <span class="next">
+          <Next />
+        </span>
+      )
+    }
+  </div>
+</nav>

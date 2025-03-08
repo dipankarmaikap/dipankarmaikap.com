@@ -3,7 +3,13 @@ import { getCollection } from "astro:content";
 import Layout from "~/layouts/Layout.astro";
 import PostCard from "~/components/post/PostCard.astro";
 import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
-const { paginatedPosts } = getPaginatedPosts(await getCollection("post"), 1);
+import Pagination from "~/components/Pagination.astro";
+
+const pageNo = 1;
+const { paginatedPosts, hasNext, hasPrev, totalPages } = getPaginatedPosts(
+  await getCollection("post"),
+  pageNo
+);
 ---
 
 <Layout>
@@ -18,5 +24,6 @@ const { paginatedPosts } = getPaginatedPosts(await getCollection("post"), 1);
         ))
       }
     </ul>
+    <Pagination {hasNext} {hasPrev} {totalPages} {pageNo} />
   </section>
 </Layout>

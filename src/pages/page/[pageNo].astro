@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import Pagination from "~/components/Pagination.astro";
 import PostCard from "~/components/post/PostCard.astro";
 import Layout from "~/layouts/Layout.astro";
 import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
@@ -12,7 +13,10 @@ if (pageNo === 1) {
   return Astro.redirect("/");
 }
 const posts = await getCollection("post");
-const { totalPages, paginatedPosts } = getPaginatedPosts(posts, pageNo);
+const { totalPages, hasNext, hasPrev, paginatedPosts } = getPaginatedPosts(
+  posts,
+  pageNo
+);
 if (pageNo > totalPages) {
   return Astro.redirect("/404");
 }
@@ -30,5 +34,6 @@ if (pageNo > totalPages) {
         ))
       }
     </ul>
+    <Pagination {hasNext} {hasPrev} {totalPages} {pageNo} />
   </section>
 </Layout>
