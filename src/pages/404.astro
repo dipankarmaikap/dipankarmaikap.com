@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "~/layouts/Layout.astro";
+const posts = (await getCollection("post"))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<Layout>
+  <main class="max-w-screen-md mx-auto p-4 text-lg md:text-xl">
+    <h1 class="text-4xl sm:text-5xl font-bold my-2">
+      Oops! That page can’t be found.
+    </h1>
+    <p class="my-4">
+      It looks like nothing was found at this location. Maybe try one of the
+      links below.
+    </p>
+    <h2 class="font-bold text-3xl mb-2 mt-8">Recent Posts</h2>
+    <ul class="flex flex-col gap-1">
+      {
+        posts.map((post) => (
+          <li>
+            <a
+              class="text-blue-600 hover:text-blue-500 hover:underline"
+              href={`/${post.id}/`}
+            >
+              {post.data.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>
