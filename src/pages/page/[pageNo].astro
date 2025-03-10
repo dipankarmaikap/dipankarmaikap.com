@@ -24,7 +24,7 @@ if (pageNo > totalPages) {
 
 Astro.response.headers.set(
   "Cache-Control",
-  "public, max-age=0, must-revalidate"
+  "public, max-age=300, must-revalidate"
 ); // No browser cache
 Astro.response.headers.set(
   "CDN-Cache-Control",
