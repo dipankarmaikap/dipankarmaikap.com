@@ -1,6 +1,6 @@
 ---
 title: "WordPress"
-pubDate: "Feb 12 2025"
+pubDate: "July 15 2020"
 description: "Explore in-depth WordPress tutorials, development tips, and best practices. Learn how to build, optimize, and manage WordPress sites efficiently with expert insights."
 ---
 

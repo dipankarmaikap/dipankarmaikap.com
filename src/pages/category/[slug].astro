@@ -22,9 +22,6 @@ const postsInCategory = posts.filter(
   (post) => post.data.category === category.id
 );
 
-if (!postsInCategory.length) {
-  return Astro.redirect("/404");
-}
 const { Content } = await render(category);
 
 Astro.response.headers.set(

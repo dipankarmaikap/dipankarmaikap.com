@@ -1,6 +1,6 @@
 ---
 title: "Personal"
-pubDate: "Feb 12 2025"
+pubDate: "July 15 2020"
 seoTitle: "Personal Thoughts & Experiences – Insights, Reflections & Stories"
 description: "Explore personal insights, reflections, and experiences on tech, life, and beyond. Read stories, lessons, and behind-the-scenes thoughts from Dipankar Maikap."
 ---

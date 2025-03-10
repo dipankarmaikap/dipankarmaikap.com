@@ -1,7 +1,7 @@
 ---
 title: "Web Development"
 seoTitle: "Web Development Tutorials & Guides – JavaScript, React, Node.js & More"
-pubDate: "Feb 12 2025"
+pubDate: "July 15 2020"
 description: "Explore the latest web development tutorials, best practices, and frameworks. Learn JavaScript, React, Node.js, and modern web technologies to build scalable applications."
 ---
 
