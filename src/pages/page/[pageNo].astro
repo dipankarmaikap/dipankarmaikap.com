@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import Pagination from "~/components/Pagination.astro";
 import PostCard from "~/components/post/PostCard.astro";
 import ArchivePageMeta from "~/components/seo/ArchivePageMeta.astro";
@@ -13,11 +12,8 @@ if (isNaN(pageNo) || pageNo < 1) {
 if (pageNo === 1) {
   return Astro.redirect("/");
 }
-const posts = await getCollection("post");
-const { totalPages, hasNext, hasPrev, paginatedPosts } = getPaginatedPosts(
-  posts,
-  pageNo
-);
+const { totalPages, hasNext, hasPrev, paginatedPosts } =
+  await getPaginatedPosts(pageNo);
 if (pageNo > totalPages) {
   return Astro.redirect("/404");
 }

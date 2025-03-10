@@ -1,0 +1,57 @@
+---
+import Layout from "~/layouts/Layout.astro";
+import { getCollection, getEntry } from "astro:content";
+import { render } from "astro:content";
+import PostMetadata from "~/components/seo/PostMetadata.astro";
+import FormattedDate from "~/components/FormattedDate.astro";
+import AuthorBio from "~/components/post/AuthorBio.astro";
+import { getPosts } from "~/utils/getPosts";
+import PostCard from "~/components/post/PostCard.astro";
+const params = Astro.params;
+const { slug } = params;
+if (slug === undefined) {
+  return Astro.redirect("/404");
+}
+const category = await getEntry("category", slug);
+if (category === undefined) {
+  return Astro.redirect("/404");
+}
+const posts = await getPosts();
+const postsInCategory = posts.filter(
+  (post) => post.data.category === category.id
+);
+
+if (!postsInCategory.length) {
+  return Astro.redirect("/404");
+}
+const { Content } = await render(category);
+
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=300, must-revalidate"
+); // No browser cache
+Astro.response.headers.set(
+  "CDN-Cache-Control",
+  "public, max-age=2592000, stale-while-revalidate=86400"
+); // 30-day CDN cache
+---
+
+<Layout>
+  <main class="max-w-screen-md mx-auto px-4">
+    <h1 class="text-4xl sm:text-5xl font-bold my-2">
+      Category: {category.data.title}
+    </h1>
+    <div class="content post">
+      <Content />
+    </div>
+    <ul class="flex flex-col gap-6 md:gap-8">
+      {
+        postsInCategory.map((post) => (
+          <li>
+            <PostCard {post} />
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>

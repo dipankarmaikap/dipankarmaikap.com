@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "~/layouts/Layout.astro";
 import PostCard from "~/components/post/PostCard.astro";
 import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
@@ -7,10 +6,8 @@ import Pagination from "~/components/Pagination.astro";
 import ArchivePageMeta from "~/components/seo/ArchivePageMeta.astro";
 
 const pageNo = 1;
-const { paginatedPosts, hasNext, hasPrev, totalPages } = getPaginatedPosts(
-  await getCollection("post"),
-  pageNo
-);
+const { paginatedPosts, hasNext, hasPrev, totalPages } =
+  await getPaginatedPosts(pageNo);
 
 Astro.response.headers.set(
   "Cache-Control",
