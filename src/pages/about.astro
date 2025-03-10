@@ -1,5 +1,13 @@
 ---
 import Layout from "~/layouts/Layout.astro";
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=0, must-revalidate"
+); // No browser cache
+Astro.response.headers.set(
+  "CDN-Cache-Control",
+  "public, max-age=2592000, stale-while-revalidate=86400"
+); // 30-day CDN cache
 ---
 
 <Layout>

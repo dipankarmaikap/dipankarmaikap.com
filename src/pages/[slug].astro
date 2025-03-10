@@ -18,6 +18,15 @@ const { Content, remarkPluginFrontmatter } = await render(post);
 const category = await getEntry("category", post.data.category);
 const categoryName = category?.data.title || "Web Development";
 const categoryUrl = "/category/" + (category?.id || "web-development");
+
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=0, must-revalidate"
+); // No browser cache
+Astro.response.headers.set(
+  "CDN-Cache-Control",
+  "public, max-age=2592000, stale-while-revalidate=86400"
+); // 30-day CDN cache
 ---
 
 <Layout>
