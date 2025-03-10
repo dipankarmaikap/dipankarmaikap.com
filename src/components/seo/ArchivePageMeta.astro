@@ -1,5 +1,5 @@
 ---
-import { authorName, author, publisher } from "~/utils/variables";
+import PageMetadata from "~/components/seo/PageMetadata.astro";
 interface Props {
   hasPrev: boolean;
   hasNext: boolean;
@@ -12,99 +12,12 @@ interface Props {
 const { hasPrev, hasNext, pageNo, title, description, path, image } =
   Astro.props;
 const siteUrl = Astro.site || "https://dipankarmaikap.com";
-const fallbackImageUrl = "fallback_og.png";
-const canonicalUrl = new URL(path === "/" ? siteUrl : siteUrl + path + "/")
-  .href;
-const imageUrl = siteUrl + (image || fallbackImageUrl);
-const language = "en_US";
+
 const getPageUrl = (page: number) =>
   `${siteUrl}${page === 1 ? "" : `page/${page}/`}`;
-
-const webpageSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": canonicalUrl,
-  url: canonicalUrl,
-  name: title,
-  description: description,
-  inLanguage: language,
-  isPartOf: {
-    "@type": "WebSite",
-    url: siteUrl,
-    name: "Dipankar Maikap",
-  },
-  primaryImageOfPage: {
-    "@type": "ImageObject",
-    url: imageUrl, // Use a representative image for the page
-    width: 1200,
-    height: 630,
-  },
-  author,
-  publisher,
-  potentialAction: [
-    {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: "https://dipankarmaikap.com/search?q={search_term_string}",
-      },
-      "query-input": "required name=search_term_string",
-    },
-    {
-      "@type": "ShareAction",
-      target: [
-        `https://x.com/intent/tweet?url=${canonicalUrl}`,
-        `https://www.facebook.com/sharer/sharer.php?u=${canonicalUrl}`,
-        `https://www.linkedin.com/shareArticle?mini=true&url=${canonicalUrl}`,
-        `https://pinterest.com/pin/create/button/?url=${canonicalUrl}`,
-        `https://www.reddit.com/submit?url=${canonicalUrl}`,
-      ],
-    },
-  ],
-};
 ---
 
-<!-- Primary SEO Meta Tags -->
-<title>{title}</title>
-<meta name="description" content={description} />
-<link rel="canonical" href={canonicalUrl} />
-<meta
-  name="keywords"
-  content="Dipanakr Maikap, Developer Blog, Personal Website, Dipankar"
-/>
-
-<!-- Open Graph (Facebook, LinkedIn, etc.) -->
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={canonicalUrl} />
-<meta property="og:site_name" content={authorName} />
-<meta property="og:locale" content={language} />
-<meta property="og:type" content="website" />
-<meta property="og:image" content={imageUrl} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-
-<!-- Twitter Metadata -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@maikap_dipankar" />
-<meta name="twitter:creator" content="@maikap_dipankar" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={imageUrl} />
-
-<!-- Dublin Core Metadata (Not essential for SEO but useful for libraries and archives) -->
-<meta name="dc.title" content={title} />
-<meta name="dc.description" content={description} />
-<meta name="dc.relation" content={canonicalUrl} />
-<meta name="dc.source" content={siteUrl} />
-<meta name="dc.language" content={language} />
-
-<!-- Schema.org JSON-LD -->
-<script
-  is:inline
-  type="application/ld+json"
-  set:html={JSON.stringify(webpageSchema)}
-/>
+<PageMetadata {title} {description} {path} {image} />
 
 <!-- Paginated Links -->
 {hasPrev && <link rel="prev" href={getPageUrl(pageNo - 1)} />}

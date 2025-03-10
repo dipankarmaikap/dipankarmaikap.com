@@ -9,7 +9,7 @@ interface Props {
 const { title, description, path, image } = Astro.props;
 const siteUrl = Astro.site || "https://dipankarmaikap.com";
 const fallbackImageUrl = "fallback_og.png";
-const canonicalUrl = new URL(path + "/", siteUrl).href;
+const canonicalUrl = new URL(path, siteUrl).href;
 
 const imageUrl = siteUrl + (image || fallbackImageUrl);
 const language = "en_US";
