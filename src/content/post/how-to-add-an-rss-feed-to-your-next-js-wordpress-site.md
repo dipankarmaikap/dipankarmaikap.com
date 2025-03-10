@@ -16,7 +16,7 @@ tags:
     "Blogging",
     "Content Syndication",
   ]
-category: web-development
+category: headless-cms
 ---
 
 RSS feeds allow users to subscribe to website updates using feed readers, improving content distribution and engagement. They are especially useful for blogs, news sites, and content-heavy platforms.
