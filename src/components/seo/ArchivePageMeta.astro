@@ -1,7 +1,5 @@
 ---
-import { getEntry } from "astro:content";
-import { render, type CollectionEntry } from "astro:content";
-import { fburl, authorName, mySchema } from "~/utils/variables";
+import { authorName, mySchema } from "~/utils/variables";
 interface Props {
   hasPrev: boolean;
   hasNext: boolean;
@@ -28,7 +26,10 @@ const getPageUrl = (page: number) =>
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalUrl} />
-<!-- <meta name="keywords" content={post.data.tags.join(", ")} /> -->
+<meta
+  name="keywords"
+  content="Dipanakr Maikap, Developer Blog, Personal Website, Dipankar"
+/>
 
 <!-- Open Graph (Facebook, LinkedIn, etc.) -->
 <meta property="og:title" content={title} />
