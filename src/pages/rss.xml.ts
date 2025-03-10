@@ -6,7 +6,7 @@ export const GET: APIRoute = async (context) => {
   const blog = await getCollection("post");
   const siteUrl = context.site || "https://dipankarmaikap.com";
 
-  return rss({
+  const response = await rss({
     title: "Dipankar Maikap – Tech Blog",
     description:
       "Web development insights, JavaScript tips, and deep dives into modern frameworks like React, Node.js, and Astro.",
@@ -21,5 +21,13 @@ export const GET: APIRoute = async (context) => {
         description: post.data.description,
         link: `${siteUrl}${post.id}/`,
       })),
+  });
+  return new Response(response.body, {
+    status: response.status,
+    headers: {
+      "Content-Type": "application/xml",
+      "Cache-Control":
+        "public, s-maxage=3600, stale-while-revalidate=86400, max-age=0, must-revalidate",
+    },
   });
 };
