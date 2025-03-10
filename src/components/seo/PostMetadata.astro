@@ -1,7 +1,7 @@
 ---
 import { getEntry } from "astro:content";
 import { render, type CollectionEntry } from "astro:content";
-import { fburl, authorName, mySchema } from "~/utils/variables";
+import { fburl, authorName, author, publisher } from "~/utils/variables";
 interface Props {
   post: CollectionEntry<"post">;
 }
@@ -11,13 +11,12 @@ const siteUrl = Astro.site || "https://dipankarmaikap.com";
 const fallbackImageUrl = "fallback_og.png";
 const title = post.data.title;
 const description = post.data.description;
-const canonicalUrl = siteUrl + post.id + "/";
+const canonicalUrl = new URL(siteUrl + post.id + "/").href;
 const imageUrl = siteUrl + (post.data?.image || fallbackImageUrl);
 const language = "en_US";
 const datePublished = post.data.pubDate.toISOString();
 const dateModified =
   post.data?.updatedDate?.toISOString() || post.data.pubDate.toISOString();
-const { "@context": _, ...author } = mySchema;
 const category = await getEntry("category", post.data.category);
 const categoryName = category?.data.title || "Web Development";
 
@@ -27,6 +26,11 @@ const articleSchema = {
   "@id": canonicalUrl,
   headline: title,
   description,
+  isPartOf: {
+    "@type": "WebSite",
+    url: siteUrl,
+    name: "Dipankar Maikap",
+  },
   image: {
     "@type": "ImageObject",
     url: imageUrl,
@@ -34,15 +38,7 @@ const articleSchema = {
     height: 630,
   },
   author,
-  publisher: {
-    ...author,
-    logo: {
-      "@type": "ImageObject",
-      url: "https://dipankarmaikap.com/logo.png",
-      width: 600,
-      height: 60,
-    },
-  },
+  publisher,
   url: canonicalUrl,
   datePublished: datePublished,
   dateModified: dateModified,
