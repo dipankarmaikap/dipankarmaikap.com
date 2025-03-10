@@ -7,6 +7,7 @@ import FormattedDate from "~/components/FormattedDate.astro";
 import AuthorBio from "~/components/post/AuthorBio.astro";
 import { getPosts } from "~/utils/getPosts";
 import PostCard from "~/components/post/PostCard.astro";
+import PageMetadata from "~/components/seo/PageMetadata.astro";
 const params = Astro.params;
 const { slug } = params;
 if (slug === undefined) {
@@ -37,11 +38,18 @@ Astro.response.headers.set(
 ---
 
 <Layout>
-  <main class="max-w-screen-md mx-auto px-4">
-    <h1 class="text-4xl sm:text-5xl font-bold my-2">
+  <PageMetadata
+    slot="meta"
+    title={category.data.seoTitle ||
+      `${category.data.title} Guides & Tutorials – Development, Optimization & Best Practices`}
+    description={category.data.description}
+    path={`/category/${category.id}`}
+  />
+  <main class="max-w-screen-md mx-auto px-4 pt-6 sm:pt-8">
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4">
       Category: {category.data.title}
     </h1>
-    <div class="content post">
+    <div class="content post text-lg md:text-xl">
       <Content />
     </div>
     <ul class="flex flex-col gap-6 md:gap-8">

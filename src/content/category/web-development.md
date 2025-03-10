@@ -1,9 +1,8 @@
 ---
 title: "Web Development"
+seoTitle: "Web Development Tutorials & Guides – JavaScript, React, Node.js & More"
 pubDate: "Feb 12 2025"
-description: "A guide to structuring frontmatter metadata for technical blog posts."
+description: "Explore the latest web development tutorials, best practices, and frameworks. Learn JavaScript, React, Node.js, and modern web technologies to build scalable applications."
 ---
 
-## Paragraph
-
-Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.
+Stay updated with the latest <strong>web development tutorials</strong>, tools, and best practices. Learn about JavaScript, React, Node.js, and other modern frameworks to build scalable web applications.
