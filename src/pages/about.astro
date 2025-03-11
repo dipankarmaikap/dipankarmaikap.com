@@ -1,7 +1,7 @@
 ---
 import Layout from "~/layouts/Layout.astro";
 import { Image } from "astro:assets";
-import AuthorImage from "~/assets/profile-picture.png";
+import AuthorImage from "~/assets/dipankar-maikap.jpg";
 import PageMetadata from "~/components/seo/PageMetadata.astro";
 
 Astro.response.headers.set(
@@ -19,11 +19,11 @@ Astro.response.headers.set(
     slot="meta"
     title="About Dipankar Maikap – Developer Relations Engineer & Tech Blogger"
     description="Learn about Dipankar Maikap, a Developer Relations Engineer at Storyblok. Explore expert insights, tutorials, and guides on JavaScript, React, Node.js, and modern web development."
-    path="/about"
+    path="/about/"
   />
   <main class="max-w-screen-md mx-auto p-4 text-lg md:text-xl">
     <h1 class="text-4xl sm:text-5xl font-bold my-2">About Me</h1>
-    <Image src={AuthorImage} alt="Dipankar Maikap" class="my-4" />
+    <Image src={AuthorImage} alt="Dipankar Maikap" class="my-4 size-60" />
     <p>
       I'm <b>Dipankar Maikap</b>, a Developer Relations Engineer at <a
         href="https://www.storyblok.com/"

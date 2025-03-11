@@ -1,6 +1,6 @@
 export const perPage = 10;
 export const fburl = "https://www.facebook.com/dipankarmaikap77";
-export const siteUrl = import.meta.env.SITE || "https://dipankarmaikap.com";
+export const siteUrl = import.meta.env.SITE || "https://dipankarmaikap.com/";
 export const authorName = "Dipankar Maikap";
 export const fallbackImageUrl = "/og/og-image-default.jpg";
 
@@ -48,9 +48,9 @@ export const publisher = {
   ...author,
   logo: {
     "@type": "ImageObject",
-    url: "https://dipankarmaikap.com/logo.png",
-    width: 600,
-    height: 60,
+    url: siteUrl + "/image/dipankar-maikap.jpg",
+    width: 400,
+    height: 400,
   },
 };
 
