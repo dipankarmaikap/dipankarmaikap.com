@@ -1,7 +1,9 @@
 export const perPage = 10;
 export const fburl = "https://www.facebook.com/dipankarmaikap77";
-export const siteUrl = "https://dipankarmaikap.com";
+export const siteUrl = import.meta.env.SITE || "https://dipankarmaikap.com";
 export const authorName = "Dipankar Maikap";
+export const fallbackImageUrl = "/og/og-image-default.jpg";
+
 export const mySchema = {
   "@context": "https://schema.org",
   "@type": "Person",

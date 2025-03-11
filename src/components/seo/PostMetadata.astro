@@ -1,18 +1,23 @@
 ---
 import { getEntry } from "astro:content";
 import { render, type CollectionEntry } from "astro:content";
-import { fburl, authorName, author, publisher } from "~/utils/variables";
+import { siteUrl } from "~/utils/variables";
+import {
+  fburl,
+  authorName,
+  author,
+  publisher,
+  fallbackImageUrl,
+} from "~/utils/variables";
 interface Props {
   post: CollectionEntry<"post">;
 }
 const { post } = Astro.props;
 const { remarkPluginFrontmatter } = await render(post);
-const siteUrl = Astro.site || "https://dipankarmaikap.com";
-const fallbackImageUrl = "fallback_og.png";
 const title = post.data.title;
 const description = post.data.description;
 const canonicalUrl = new URL(post.id + "/", siteUrl).href;
-const imageUrl = siteUrl + (post.data?.image || fallbackImageUrl);
+const imageUrl = new URL(post.data?.image || fallbackImageUrl, siteUrl).href;
 const language = "en_US";
 const datePublished = post.data.pubDate.toISOString();
 const dateModified =

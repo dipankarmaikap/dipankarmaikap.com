@@ -1,5 +1,11 @@
 ---
-import { authorName, author, publisher } from "~/utils/variables";
+import {
+  authorName,
+  author,
+  publisher,
+  fallbackImageUrl,
+  siteUrl,
+} from "~/utils/variables";
 interface Props {
   title: string;
   description: string;
@@ -7,11 +13,10 @@ interface Props {
   image?: string;
 }
 const { title, description, path, image } = Astro.props;
-const siteUrl = Astro.site || "https://dipankarmaikap.com";
-const fallbackImageUrl = "fallback_og.png";
 const canonicalUrl = new URL(path, siteUrl).href;
 
-const imageUrl = siteUrl + (image || fallbackImageUrl);
+const imageUrl = new URL(image || fallbackImageUrl, siteUrl).href;
+
 const language = "en_US";
 
 const webpageSchema = {

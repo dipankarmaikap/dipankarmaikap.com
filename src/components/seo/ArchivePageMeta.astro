@@ -1,5 +1,6 @@
 ---
 import PageMetadata from "~/components/seo/PageMetadata.astro";
+import { siteUrl } from "~/utils/variables";
 interface Props {
   hasPrev: boolean;
   hasNext: boolean;
@@ -11,7 +12,6 @@ interface Props {
 }
 const { hasPrev, hasNext, pageNo, title, description, path, image } =
   Astro.props;
-const siteUrl = Astro.site || "https://dipankarmaikap.com";
 
 const getPageUrl = (page: number) =>
   `${siteUrl}${page === 1 ? "" : `page/${page}/`}`;

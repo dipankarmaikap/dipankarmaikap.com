@@ -1,12 +1,11 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { getPosts } from "~/utils/getPosts";
+import { siteUrl } from "~/utils/variables";
 
-export const GET: APIRoute = async (context) => {
+export const GET: APIRoute = async () => {
   const posts = await getPosts();
   const categories = await getCollection("category");
-
-  const siteUrl = context.site || "https://dipankarmaikap.com";
   const staticPages = ["", "about", "contact"].map(
     (path) => `
     <url>

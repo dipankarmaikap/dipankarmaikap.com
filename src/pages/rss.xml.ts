@@ -1,12 +1,10 @@
 import rss from "@astrojs/rss";
 import type { APIRoute } from "astro";
 import { getPosts } from "~/utils/getPosts";
+import { siteUrl } from "~/utils/variables";
 
-export const GET: APIRoute = async (context) => {
+export const GET: APIRoute = async () => {
   const posts = await getPosts();
-
-  const siteUrl = context.site || "https://dipankarmaikap.com";
-
   const response = await rss({
     title: "Dipankar Maikap – Tech Blog",
     description:
