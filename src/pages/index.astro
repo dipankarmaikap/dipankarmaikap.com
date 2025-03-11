@@ -9,14 +9,7 @@ const pageNo = 1;
 const { paginatedPosts, hasNext, hasPrev, totalPages } =
   await getPaginatedPosts(pageNo);
 
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=300, must-revalidate"
-); // No browser cache
-Astro.response.headers.set(
-  "CDN-Cache-Control",
-  "public, max-age=2592000, stale-while-revalidate=86400"
-); // 30-day CDN cache
+export const prerender = true;
 ---
 
 <Layout>

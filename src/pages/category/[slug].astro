@@ -1,37 +1,26 @@
 ---
 import Layout from "~/layouts/Layout.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { render } from "astro:content";
-import PostMetadata from "~/components/seo/PostMetadata.astro";
-import FormattedDate from "~/components/FormattedDate.astro";
-import AuthorBio from "~/components/post/AuthorBio.astro";
 import { getPosts } from "~/utils/getPosts";
 import PostCard from "~/components/post/PostCard.astro";
 import PageMetadata from "~/components/seo/PageMetadata.astro";
-const params = Astro.params;
-const { slug } = params;
-if (slug === undefined) {
-  return Astro.redirect("/404");
+
+export const prerender = true;
+export async function getStaticPaths() {
+  const categories = await getCollection("category");
+  return categories.map((category) => {
+    return { params: { slug: category.id }, props: { category } };
+  });
 }
-const category = await getEntry("category", slug);
-if (category === undefined) {
-  return Astro.redirect("/404");
-}
+const { category } = Astro.props;
+
 const posts = await getPosts();
 const postsInCategory = posts.filter(
   (post) => post.data.category === category.id
 );
 
 const { Content } = await render(category);
-
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=300, must-revalidate"
-); // No browser cache
-Astro.response.headers.set(
-  "CDN-Cache-Control",
-  "public, max-age=2592000, stale-while-revalidate=86400"
-); // 30-day CDN cache
 ---
 
 <Layout>

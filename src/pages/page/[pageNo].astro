@@ -3,29 +3,33 @@ import Pagination from "~/components/Pagination.astro";
 import PostCard from "~/components/post/PostCard.astro";
 import ArchivePageMeta from "~/components/seo/ArchivePageMeta.astro";
 import Layout from "~/layouts/Layout.astro";
-import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
-const params = Astro.params;
-const pageNo = parseInt(params.pageNo || "1");
-if (isNaN(pageNo) || pageNo < 1) {
-  return Astro.redirect("/404");
-}
-if (pageNo === 1) {
-  return Astro.redirect("/");
-}
-const { totalPages, hasNext, hasPrev, paginatedPosts } =
-  await getPaginatedPosts(pageNo);
-if (pageNo > totalPages) {
-  return Astro.redirect("/404");
-}
+import { getPosts } from "~/utils/getPosts";
+import { perPage } from "~/utils/variables";
 
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=300, must-revalidate"
-); // No browser cache
-Astro.response.headers.set(
-  "CDN-Cache-Control",
-  "public, max-age=2592000, stale-while-revalidate=86400"
-); // 30-day CDN cache
+export const prerender = true;
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const totalPages = Math.ceil(posts.length / perPage);
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+    (i) => i !== 1
+  );
+
+  return pages.map((pageNo) => {
+    const startIndex = (pageNo - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    return {
+      params: { pageNo: pageNo.toString() },
+      props: {
+        paginatedPosts: posts.slice(startIndex, endIndex),
+        hasPrev: pageNo > 1,
+        hasNext: pageNo < totalPages,
+        totalPages,
+        pageNo,
+      },
+    };
+  });
+}
+const { paginatedPosts, hasNext, hasPrev, totalPages, pageNo } = Astro.props;
 ---
 
 <Layout>

@@ -4,14 +4,7 @@ import { Image } from "astro:assets";
 import AuthorImage from "~/assets/dipankar-maikap.jpg";
 import PageMetadata from "~/components/seo/PageMetadata.astro";
 
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=300, must-revalidate"
-); // No browser cache
-Astro.response.headers.set(
-  "CDN-Cache-Control",
-  "public, max-age=2592000, stale-while-revalidate=86400"
-); // 30-day CDN cache
+export const prerender = true;
 ---
 
 <Layout>

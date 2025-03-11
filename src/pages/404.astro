@@ -5,6 +5,8 @@ const posts = (await getCollection("post"))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 5);
+
+export const prerender = true;
 ---
 
 <Layout>

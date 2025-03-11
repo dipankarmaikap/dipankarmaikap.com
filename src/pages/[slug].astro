@@ -1,32 +1,26 @@
 ---
+import type { GetStaticPaths } from "astro";
 import Layout from "~/layouts/Layout.astro";
 import { getEntry } from "astro:content";
 import { render } from "astro:content";
 import PostMetadata from "~/components/seo/PostMetadata.astro";
 import FormattedDate from "~/components/FormattedDate.astro";
 import AuthorBio from "~/components/post/AuthorBio.astro";
-const params = Astro.params;
-const { slug } = params;
-if (slug === undefined) {
-  return Astro.redirect("/404");
+import { getPosts } from "~/utils/getPosts";
+
+export const prerender = true;
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => {
+    return { params: { slug: post.id }, props: { post } };
+  });
 }
-const post = await getEntry("post", slug);
-if (post === undefined) {
-  return Astro.redirect("/404");
-}
+const { post } = Astro.props;
+
 const { Content, remarkPluginFrontmatter } = await render(post);
 const category = await getEntry("category", post.data.category);
 const categoryName = category?.data.title || "Web Development";
 const categoryUrl = "/category/" + (category?.id || "web-development");
-
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=300, must-revalidate"
-); // No browser cache
-Astro.response.headers.set(
-  "CDN-Cache-Control",
-  "public, max-age=2592000, stale-while-revalidate=86400"
-); // 30-day CDN cache
 ---
 
 <Layout>
