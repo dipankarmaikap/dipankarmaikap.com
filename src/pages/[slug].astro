@@ -1,5 +1,4 @@
 ---
-import type { GetStaticPaths } from "astro";
 import Layout from "~/layouts/Layout.astro";
 import { getEntry } from "astro:content";
 import { render } from "astro:content";
@@ -11,11 +10,23 @@ import { getPosts } from "~/utils/getPosts";
 export const prerender = true;
 export async function getStaticPaths() {
   const posts = await getPosts();
-  return posts.map((post) => {
-    return { params: { slug: post.id }, props: { post } };
+  return posts.map((post, index) => {
+    const prevPost = index > 0 ? posts[index - 1] : null;
+    const nextPost = index < posts.length - 1 ? posts[index + 1] : null;
+
+    // Filter out the current, previous, and next posts
+    const otherPosts = posts.filter(
+      (p) => p.id !== post.id && p.id !== prevPost?.id && p.id !== nextPost?.id
+    );
+    // Shuffle and select 5 random posts for "More Links"
+    const moreLinks = otherPosts.sort(() => 0.5 - Math.random()).slice(0, 5);
+    return {
+      params: { slug: post.id },
+      props: { post, nextPost, prevPost, moreLinks },
+    };
   });
 }
-const { post } = Astro.props;
+const { post, nextPost, prevPost, moreLinks } = Astro.props;
 
 const { Content, remarkPluginFrontmatter } = await render(post);
 const category = await getEntry("category", post.data.category);
@@ -49,6 +60,46 @@ const categoryUrl = "/category/" + (category?.id || "web-development");
     </div>
     <footer>
       <AuthorBio />
+      <div class="nav-links flex flex-col gap-4 text-xl sm:text-2xl">
+        {
+          prevPost && (
+            <a
+              class="flex flex-col text-blue-600 hover:underline"
+              href={`/${prevPost.id}/`}
+            >
+              <span>← Previous:</span> <span>{prevPost.data.title}</span>
+            </a>
+          )
+        }
+        {
+          nextPost && (
+            <a
+              class="flex flex-col text-blue-600 hover:underline items-end"
+              href={`/${nextPost.id}/`}
+            >
+              <span>Next: →</span>
+              <span>{nextPost.data.title}</span>
+            </a>
+          )
+        }
+      </div>
+      <div class="more-posts mt-6">
+        <p class="text-2xl sm:text-3xl font-semibold">More posts</p>
+        <ul class="flex flex-col gap-1.5 mt-2 text-xl">
+          {
+            moreLinks.map((post) => (
+              <li>
+                <a
+                  class="text-blue-600 hover:text-blue-500 hover:underline"
+                  href={`/${post.id}/`}
+                >
+                  {post.data.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </footer>
   </article>
 </Layout>
