@@ -1,0 +1,31 @@
+---
+
+---
+
+<div class="fixed top-0 w-full bg-neutral-300 dark:bg-neutral-700 h-1 z-10">
+  <div id="scrollBarHighlight" class="bg-blue-600 h-full w-0"></div>
+</div>
+<script>
+  window.onscroll = function () {
+    renderProgressBar();
+  };
+
+  function renderProgressBar() {
+    // Select the progress bar element
+    const progressBar = document.getElementById("scrollBarHighlight");
+    if (!progressBar) return;
+    // Get scroll and height values
+    const currentScrollHeight = document.documentElement.scrollTop;
+    const totalContentHeight = document.documentElement.scrollHeight;
+    const viewportHeight = document.documentElement.clientHeight;
+
+    // Calculate maximum scrollable height
+    const totalScrollHeight = totalContentHeight - viewportHeight;
+
+    // Calculate scroll percentage
+    const scrollPercentage = (currentScrollHeight / totalScrollHeight) * 100;
+
+    // Update progress bar width
+    progressBar.style.width = `${scrollPercentage}%`;
+  }
+</script>
