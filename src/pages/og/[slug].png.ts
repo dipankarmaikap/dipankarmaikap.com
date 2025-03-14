@@ -2,6 +2,8 @@ import type { APIRoute } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { getEntry } from "astro:content";
 import TemplateOne from "~/components/og/TemplateOne.astro";
+import sharp from "sharp";
+
 const container = await experimental_AstroContainer.create();
 
 export const GET: APIRoute = async ({ params }) => {
@@ -15,11 +17,13 @@ export const GET: APIRoute = async ({ params }) => {
       title: post?.data.title,
     },
   });
+  const pngBuffer = await sharp(Buffer.from(result)).toFormat("png").toBuffer();
 
-  return new Response(result, {
+  return new Response(pngBuffer, {
     headers: {
-      "Content-Type": "image/svg+xml",
-      "Cache-Control": "public, max-age=31536000, immutable",
+      "Content-Type": "image/png",
+      "Cache-Control":
+        "public, max-age=31536000, immutable, s-maxage=31536000, stale-while-revalidate=86400",
     },
   });
 };
