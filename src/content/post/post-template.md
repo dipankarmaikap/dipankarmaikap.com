@@ -2,7 +2,6 @@
 title: "This is a post template"
 pubDate: "Feb 12 2025"
 description: "A guide to structuring frontmatter metadata for technical blog posts."
-image: "cover-image.webp"
 tags: ["web development", "JavaScript", "Astro"]
 category: web-development
 draft: true

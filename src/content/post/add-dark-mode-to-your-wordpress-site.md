@@ -3,7 +3,6 @@ title: "Add dark mode to your wordpress site"
 pubDate: "July 18 2020"
 updatedDate: "Feb 20 2025"
 description: "Learn how to add a dark mode toggle to your WordPress site using CSS and JavaScript. Improve user experience and accessibility with this simple guide."
-image: "cover-image.webp"
 tags:
   [
     "WordPress dark mode",

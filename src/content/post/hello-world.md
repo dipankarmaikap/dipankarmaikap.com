@@ -3,7 +3,6 @@ title: "Hello, World!"
 pubDate: "July 15 2020"
 updatedDate: "Feb 12 2025"
 description: "Launching my web development blog! Sharing my coding journey, solutions to coding challenges, and insights on learning new technologies."
-image: "cover-image.webp"
 tags:
   [
     "web development",
