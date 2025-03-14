@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { experimental_AstroContainer } from "astro/container";
 import { getEntry } from "astro:content";
 import TemplateOne from "~/components/og/TemplateOne.astro";
-import sharp from "sharp";
+import { Resvg } from "@resvg/resvg-js";
 
 const container = await experimental_AstroContainer.create();
 
@@ -17,7 +17,8 @@ export const GET: APIRoute = async ({ params }) => {
       title: post?.data.title,
     },
   });
-  const pngBuffer = await sharp(Buffer.from(result)).toFormat("png").toBuffer();
+  const resvg = new Resvg(result);
+  const pngBuffer = resvg.render().asPng();
 
   return new Response(pngBuffer, {
     headers: {

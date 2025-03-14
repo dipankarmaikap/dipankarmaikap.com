@@ -33,12 +33,12 @@
     "@astrojs/mdx": "^4.1.0",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/vercel": "^8.1.1",
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.0.12",
     "astro": "^5.4.2",
     "mdast-util-to-string": "^4.0.0",
     "reading-time": "^1.5.0",
     "rehype-external-links": "^3.0.0",
-    "sharp": "^0.33.5",
     "tailwindcss": "^4.0.12"
   },
   "devDependencies": {
