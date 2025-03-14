@@ -1,4 +1,6 @@
 ---
+import { siteUrl } from "~/utils/variables";
+
 interface Props {
   title: string;
 }
@@ -55,7 +57,7 @@ const lines = wrapText(title, maxCharsPerLine);
 
   <!-- Writer Section -->
   <image
-    href="/images/dipankar-maikap.jpg"
+    href={siteUrl + "images/dipankar-maikap.jpg"}
     x="570"
     y="450"
     width="60"
