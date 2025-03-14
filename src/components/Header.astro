@@ -1,23 +1,22 @@
-<header class="border-b border-gray-200">
-  <div
-    class="max-w-screen-md mx-auto flex justify-between items-center font-sas px-4 py-5"
-  >
-    <div class="flex flex-col logo">
-      <a class="text-4xl font-bold underline hover:text-blue-600" href="/">
-        Dipankar
-      </a>
-      <p class="text-lg">Developer & Tech Writer</p>
+---
+import Logo from "~/components/Logo.astro";
+import MainNavigation from "~/components/MainNavigation.astro";
+import ThemeIcon from "~/components/ThemeIcon.astro";
+---
+
+<header class="border-b border-gray-200 dark:border-neutral-700">
+  <div class="max-w-screen-md mx-auto px-4 py-2 md:py-5">
+    <div class="flex justify-between items-center">
+      <Logo />
+      <div class="last flex gap-4 items-center">
+        <div class="nav hidden sm:block">
+          <MainNavigation />
+        </div>
+        <ThemeIcon />
+      </div>
     </div>
-    <nav class="text-lg font-medium flex gap-6 uppercase">
-      <a
-        class="hover:underline hover:text-blue-600 hidden sm:inline-block"
-        href="/about/"
-      >
-        About
-      </a>
-      <a class="hover:underline hover:text-blue-600" href="/contact/">
-        Contact
-      </a>
-    </nav>
+    <div class="nav sm:hidden">
+      <MainNavigation />
+    </div>
   </div>
 </header>

@@ -1,13 +1,18 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-serif: "serif";
+  --color-blue-600: #0073e8;
+  --color-blue-700: #066cd3;
 }
 .post a {
   @apply text-blue-600 underline;
 }
 .post code {
-  @apply bg-neutral-200 px-1 rounded break-words;
+  @apply bg-neutral-200 dark:bg-neutral-700 px-1 rounded break-words;
 }
+
 .post pre {
   @apply p-4 rounded my-4;
 }
@@ -55,4 +60,7 @@
 .post pre {
   scrollbar-width: thin;
   scrollbar-color: #555 #1e1e1e;
+}
+.smooth {
+  @apply transition duration-100 ease-in-out;
 }
