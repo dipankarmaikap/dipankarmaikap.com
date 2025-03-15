@@ -68,7 +68,10 @@
 
     if (isInputError(error)) highlightInputErrors(error);
     if (isActionError(error)) createToast(error.message, "error");
-    if (data) createToast(data, "success");
+    if (data) {
+      createToast(data, "success");
+      createLinkForm.reset();
+    }
     loader.setLoading(false);
   });
 </script>
