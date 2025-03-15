@@ -10,7 +10,6 @@
       type="text"
       name="name"
       id="name"
-      required
     />
   </div>
   <div class="form-group">
@@ -20,7 +19,6 @@
       type="email"
       name="email"
       id="email"
-      required
     />
   </div>
   <div class="form-group">
@@ -29,13 +27,48 @@
       class="ring ring-neutral-300 focus:outline-none focus:ring-blue-600 p-1 mt-1 flex w-full"
       name="email"
       id="message"
-      required
       rows="4"></textarea>
   </div>
   <div class="flex mt-2">
     <button
-      class="bg-blue-600 hover:bg-blue-700 text-white p-2 cursor-pointer px-6"
-      >Send message</button
+      type="submit"
+      class="bg-blue-600 flex items-start hover:bg-blue-700 text-white p-2 cursor-pointer px-6 disabled:bg-neutral-700 disabled:opacity-55 disabled:cursor-not-allowed"
+      data-loading="Sending..."
     >
+      <span class="spinner flex h-full items-center"> </span>
+      Send message
+    </button>
   </div>
 </form>
+<script>
+  import { isInputError } from "astro:actions";
+  import { isActionError } from "astro:actions";
+  import { actions } from "astro:actions";
+  import {
+    createButtonLoader,
+    highlightInputErrors,
+    clearErrors,
+  } from "~/utils/formHealper";
+  import { createToast } from "~/utils/createToast";
+  const createLinkForm = document.getElementById(
+    "contactForm"
+  ) as HTMLFormElement;
+  createLinkForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    clearErrors(createLinkForm);
+    const formData = new FormData(event.target as HTMLFormElement);
+    console.log(Object.fromEntries(formData.entries()));
+    const submitButton = createLinkForm.querySelector(
+      "button[type=submit]"
+    ) as HTMLButtonElement;
+
+    const loader = createButtonLoader(submitButton);
+    loader.setLoading(true);
+    const { error, data } = await actions.testAction(formData);
+
+    if (isInputError(error)) highlightInputErrors(error);
+    if (isActionError(error)) createToast(error.message, "error");
+    if (data) createToast(data, "success");
+    loader.setLoading(false);
+  });
+</script>
