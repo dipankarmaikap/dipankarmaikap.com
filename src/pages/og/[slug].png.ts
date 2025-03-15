@@ -3,8 +3,10 @@ import { experimental_AstroContainer } from "astro/container";
 import { getEntry } from "astro:content";
 import TemplateOne from "~/components/og/TemplateOne.astro";
 import { Resvg } from "@resvg/resvg-js";
+import { getPosts } from "~/utils/getPosts";
 
 const container = await experimental_AstroContainer.create();
+export const prerender = true;
 
 export const GET: APIRoute = async ({ params }) => {
   const slug = params.slug;
@@ -12,14 +14,13 @@ export const GET: APIRoute = async ({ params }) => {
   if (!post) {
     return Response.redirect("/404", 302);
   }
-  const result = await container.renderToString(TemplateOne, {
+  const svg = await container.renderToString(TemplateOne, {
     props: {
       title: post?.data.title,
     },
   });
-  const resvg = new Resvg(result);
+  const resvg = new Resvg(svg);
   const pngBuffer = resvg.render().asPng();
-
   return new Response(pngBuffer, {
     headers: {
       "Content-Type": "image/png",
@@ -28,3 +29,11 @@ export const GET: APIRoute = async ({ params }) => {
     },
   });
 };
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => {
+    return {
+      params: { slug: post.id },
+    };
+  });
+}
