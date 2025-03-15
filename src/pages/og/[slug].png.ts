@@ -1,22 +1,22 @@
 import type { APIRoute } from "astro";
 import { experimental_AstroContainer } from "astro/container";
-import { getEntry } from "astro:content";
 import TemplateOne from "~/components/og/TemplateOne.astro";
 import { Resvg } from "@resvg/resvg-js";
 import { getPosts } from "~/utils/getPosts";
+import { siteUrl } from "~/utils/variables";
+import { imageUrlToBase64 } from "~/utils/imageUrlToBase64";
 
 const container = await experimental_AstroContainer.create();
 export const prerender = true;
+const userAvatar = siteUrl + "images/dipankar-maikap.jpg";
 
-export const GET: APIRoute = async ({ params }) => {
-  const slug = params.slug;
-  const post = await getEntry("post", slug || "hello-world");
-  if (!post) {
-    return Response.redirect("/404", 302);
-  }
+export const GET: APIRoute = async ({ props }) => {
+  const avatarBase64 = await imageUrlToBase64(userAvatar);
+
   const svg = await container.renderToString(TemplateOne, {
     props: {
-      title: post?.data.title,
+      title: props.post.data.title,
+      avatar: avatarBase64,
     },
   });
   const resvg = new Resvg(svg);
@@ -34,6 +34,7 @@ export async function getStaticPaths() {
   return posts.map((post) => {
     return {
       params: { slug: post.id },
+      props: { post },
     };
   });
 }

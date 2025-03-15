@@ -3,8 +3,9 @@ import { siteUrl } from "~/utils/variables";
 
 interface Props {
   title: string;
+  avatar?: string;
 }
-const { title } = Astro.props;
+const { title, avatar } = Astro.props;
 function wrapText(text: string, maxCharsPerLine: number) {
   const words = text.split(" ");
   let lines = [];
@@ -23,8 +24,9 @@ function wrapText(text: string, maxCharsPerLine: number) {
 
   return lines;
 }
-const maxCharsPerLine = 50; // Adjust based on font size
+const maxCharsPerLine = 40; // Adjust based on font size
 const lines = wrapText(title, maxCharsPerLine);
+const profile = avatar || siteUrl + "images/dipankar-maikap.jpg";
 ---
 
 <svg
@@ -40,15 +42,15 @@ const lines = wrapText(title, maxCharsPerLine);
   <text
     x="50%"
     y="35%"
-    font-family="Inter, sans-serif"
     font-size="48"
     fill="#333"
     text-anchor="middle"
     dominant-baseline="middle"
+    font-weight="bold"
   >
     {
       lines.map((line, i) => (
-        <tspan x="50%" dy={i === 0 ? "0" : "1.2em"}>
+        <tspan x="50%" dy={i === 0 ? "0" : "1.4em"}>
           {line}
         </tspan>
       ))
@@ -56,18 +58,23 @@ const lines = wrapText(title, maxCharsPerLine);
   </text>
 
   <!-- Writer Section -->
+  <defs>
+    <clipPath id="clipCircle">
+      <circle cx="600" cy="480" r="30"></circle>
+    </clipPath>
+  </defs>
+
   <image
-    href={siteUrl + "images/dipankar-maikap.jpg"}
+    href={profile}
     x="570"
     y="450"
     width="60"
     height="60"
-    clip-path="circle(50%)"
+    clip-path="url(#clipCircle)"
   />
   <text
     x="600"
     y="535"
-    font-family="Inter, sans-serif"
     font-size="32"
     fill="#333"
     margin-top="5px"
@@ -75,5 +82,16 @@ const lines = wrapText(title, maxCharsPerLine);
     dominant-baseline="middle"
   >
     Dipanakr Maikap
+  </text>
+  <text
+    x="600"
+    y="565"
+    font-size="18"
+    fill="#333"
+    margin-top="5px"
+    text-anchor="middle"
+    dominant-baseline="middle"
+  >
+    Developer Relations Engineer <tspan fill="#0073e8">@storyblok</tspan>.
   </text>
 </svg>
