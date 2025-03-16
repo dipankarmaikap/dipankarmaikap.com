@@ -5,6 +5,7 @@
 <button
   class="cursor-pointer smooth hover:bg-neutral-100 dark:hover:bg-neutral-800 p-1 rounded"
   id="themeToggle"
+  aria-label="Switch to dark mode"
 >
   <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path
@@ -47,10 +48,13 @@
     return "light";
   })();
 
+  const themeToggleButton = document.getElementById("themeToggle");
+
   if (theme === "light") {
     document.documentElement.classList.remove("dark");
   } else {
     document.documentElement.classList.add("dark");
+    themeToggleButton.setAttribute("aria-label", "Switch to light mode");
   }
 
   window.localStorage.setItem("theme", theme);
@@ -60,9 +64,11 @@
     element.classList.toggle("dark");
     const isDark = element.classList.contains("dark");
     localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeToggleButton.setAttribute(
+      "aria-label",
+      isDark ? "Switch to light mode" : "Switch to dark mode"
+    );
   };
 
-  document
-    .getElementById("themeToggle")
-    ?.addEventListener("click", handleToggleClick);
+  themeToggleButton?.addEventListener("click", handleToggleClick);
 </script>
