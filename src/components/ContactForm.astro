@@ -39,6 +39,8 @@
       Send message
     </button>
   </div>
+  <div id="errorMsg" class="bg-red-100 text-red-800 rounded-sm"></div>
+  <div id="sucessMsg" class="bg-green-100 text-green-800 rounded-sm"></div>
 </form>
 <script>
   import { isInputError } from "astro:actions";
@@ -49,15 +51,15 @@
     highlightInputErrors,
     clearErrors,
   } from "~/utils/formHealper";
-  import { createToast } from "~/utils/createToast";
   const createLinkForm = document.getElementById(
     "contactForm"
   ) as HTMLFormElement;
+  const errorMsgDiv = document.getElementById("errorMsg") as HTMLFormElement;
+  const sucessMsgDiv = document.getElementById("sucessMsg") as HTMLDivElement;
   createLinkForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearErrors(createLinkForm);
     const formData = new FormData(event.target as HTMLFormElement);
-    console.log(Object.fromEntries(formData.entries()));
     const submitButton = createLinkForm.querySelector(
       "button[type=submit]"
     ) as HTMLButtonElement;
@@ -65,11 +67,12 @@
     const loader = createButtonLoader(submitButton);
     loader.setLoading(true);
     const { error, data } = await actions.testAction(formData);
-
     if (isInputError(error)) highlightInputErrors(error);
-    if (isActionError(error)) createToast(error.message, "error");
+    if (isActionError(error)) {
+      errorMsgDiv.innerHTML = `<p class="error-message m-2">${data}</p>`;
+    }
     if (data) {
-      createToast(data, "success");
+      sucessMsgDiv.innerHTML = `<p class="error-message m-2">${data}</p>`;
       createLinkForm.reset();
     }
     loader.setLoading(false);
