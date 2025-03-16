@@ -25,7 +25,7 @@
     <label class="flex" for="message">Message</label>
     <textarea
       class="ring ring-neutral-300 focus:outline-none focus:ring-blue-600 p-1 mt-1 flex w-full"
-      name="email"
+      name="message"
       id="message"
       rows="4"></textarea>
   </div>
@@ -69,7 +69,7 @@
     const { error, data } = await actions.sendEmail(formData);
     if (isInputError(error)) highlightInputErrors(error);
     if (isActionError(error)) {
-      errorMsgDiv.innerHTML = `<p class="error-message m-2">${data}</p>`;
+      errorMsgDiv.innerHTML = `<p class="error-message m-2">${error.message}</p>`;
     }
     if (data) {
       sucessMsgDiv.innerHTML = `<p class="error-message m-2">${data}</p>`;
