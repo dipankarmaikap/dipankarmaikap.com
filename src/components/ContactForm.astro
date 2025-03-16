@@ -66,7 +66,7 @@
 
     const loader = createButtonLoader(submitButton);
     loader.setLoading(true);
-    const { error, data } = await actions.testAction(formData);
+    const { error, data } = await actions.sendEmail(formData);
     if (isInputError(error)) highlightInputErrors(error);
     if (isActionError(error)) {
       errorMsgDiv.innerHTML = `<p class="error-message m-2">${data}</p>`;

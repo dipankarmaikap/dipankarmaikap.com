@@ -67,7 +67,7 @@ export function highlightInputErrors(error: any) {
       errorElement.classList.add(
         "error-message",
         "text-red-500",
-        "text-sm",
+        "text-base",
         "mt-1"
       );
       input.insertAdjacentElement("afterend", errorElement);
