@@ -31,10 +31,12 @@ export const GET: APIRoute = async ({ props }) => {
 };
 export async function getStaticPaths() {
   const posts = await getPosts();
-  return posts.map((post) => {
-    return {
-      params: { slug: post.id },
-      props: { post },
-    };
-  });
+  return posts
+    .filter((post) => !post.data.image)
+    .map((post) => {
+      return {
+        params: { slug: post.id },
+        props: { post },
+      };
+    });
 }
