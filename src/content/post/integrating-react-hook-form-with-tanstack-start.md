@@ -1,0 +1,494 @@
+---
+title: "Ultimate Guide to Integrating React Hook Form with TanStack Start"
+pubDate: "March 23 2025"
+updatedDate: "March 23 2025"
+description: "Learn to integrate TanStack Start with React Hook Form for type-safe, reusable forms. This guide covers client and server-side validation, JavaScript-free support, and more."
+tags:
+  [
+    "TanStack Start",
+    "React Hook Form",
+    "TypeScript",
+    "Form Validation",
+    "Server Functions",
+    "Zod",
+    "Reusable Components",
+    "SEO-Friendly Forms",
+  ]
+category: web-development
+---
+
+In this tutorial, we’ll explore how to integrate [React Hook Form](https://www.react-hook-form.com/), a widely-used form library for [React](https://react.dev/), with [TanStack Start](https://tanstack.com/start/latest), an innovative React meta-framework. This guide will walk you through creating a robust, type-safe form that supports both client-side and server-side validation, works with or without JavaScript enabled, and remains reusable across your projects.
+
+## Prerequisites
+
+To follow along, you should have a basic understanding of React and React Hook Form. Expertise isn’t required, but familiarity with their core concepts will help. Additionally, while knowledge of TanStack Start isn’t mandatory, reviewing its [official documentation](https://tanstack.com/start/latest/docs/framework/react/overview) beforehand is recommended for a smoother experience.
+
+## Why React Hook Form and TanStack Start?
+
+[**React Hook Form**](https://www.react-hook-form.com/get-started/) is a popular choice for managing forms in React, excelling at client-side validation and providing instant feedback to users when they submit incorrect data. However, client-side validation has limitations—such as when JavaScript is disabled in the browser. For critical workflows, server-side validation is a best practice to ensure reliability.
+
+[**TanStack Start**](https://tanstack.com/start/latest/docs/framework/react/overview), a modern React meta-framework, enhances this setup with powerful features like its [Server Functions](https://tanstack.com/start/latest/docs/framework/react/server-functions), which offer a superior alternative to server actions in frameworks like [Next.js](https://nextjs.org/). In this guide, we’ll leverage these tools to build a form that:
+
+- Validates input on both client and server sides.
+- Functions seamlessly with or without JavaScript.
+- Remains type-safe and reusable.
+
+Let’s dive into the code!
+
+### Required Packages
+
+Beyond a TanStack Start project, you’ll need the following dependencies:
+
+```bash
+pnpm i @hookform/resolvers clsx react-hook-form zod
+```
+
+- **Tailwind CSS**: Used for styling in this guide (optional; feel free to use plain CSS).
+- **clsx**: A utility library for conditionally managing class lists.
+- **react-hook-form**: The core form library.
+- **zod**: For schema validation and type safety.
+
+All code is available on GitHub (https://github.com/dipankarmaikap/tanstack-react-hook-form) with a live demo here (https://tanstack-react-hook-form.netlify.app/).
+
+## Organizing the Project Structure
+
+While you’re free to structure your project as you prefer, here’s an approach that works well:
+
+- **src/routes**: Contains all TanStack Start routes (e.g., `index.tsx` for the homepage).
+- **src/app**: A custom folder for route-specific logic.
+  - **src/app/home**: Dedicated to the homepage.
+    - `components/SimpleForm.tsx`: Form component.
+    - `schema.ts`: Form schemas and types.
+    - `actions.ts`: Server Functions for form handling.
+- **src/components**: Reusable components (e.g., `Input.tsx`).
+- **src/utils**: Helper functions (e.g., `delay.ts` for mimicking server delays).
+- **src/lib**: Server-related utilities (e.g., `form-helper.ts` for reusable form logic).
+
+These files don’t exist yet—they’re examples of how we’ll organize the code moving forward.
+
+## Setting Up a Page in TanStack Start
+
+Start by defining a route in `src/routes/index.tsx`:
+
+```tsx
+import { createFileRoute } from "@tanstack/react-router";
+import SimpleForm from "~/app/home/components/SimpleForm";
+
+export const Route = createFileRoute("/")({
+  component: RouteComponent,
+  loader: async () => {
+    return {
+      name: "Home",
+    };
+  },
+});
+
+function RouteComponent() {
+  return (
+    <main className="p-4 pt-8 sm:pt-12">
+      <h1 className="text-2xl font-bold mb-4">Examples</h1>
+      <div className="flex">
+        <SimpleForm />
+      </div>
+    </main>
+  );
+}
+```
+
+- **RouteComponent**: The page content, rendering a SimpleForm component.
+- **createFileRoute**: TanStack Start’s method for defining routes and loading data. [Refer to their docs](https://tanstack.com/start/latest/docs/framework/react/learn-the-basics) for more details.
+
+## Defining the Form Schema
+
+Create a schema with Zod for type safety and reusability in `src/app/home/schema.ts`:
+
+```tsx
+import { z } from "zod";
+
+const SimpleFormSchema = z.object({
+  email: z.string().email(),
+});
+
+export type SimpleFormSchemaType = z.infer<typeof SimpleFormSchema>;
+export { SimpleFormSchema };
+```
+
+This schema ensures the `email` field is a valid email string.
+
+## Building the Simple Form Component
+
+Now, let’s create a basic form in `src/app/home/components/SimpleForm.tsx`:
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { SimpleFormSchema, type SimpleFormSchemaType } from "~/app/home/schema";
+
+export default function SimpleForm() {
+  const simpleForm = useForm<SimpleFormSchemaType>({
+    resolver: zodResolver(SimpleFormSchema),
+  });
+  const { register, handleSubmit, formState } = simpleForm;
+  const { errors } = formState;
+
+  const onSubmit: SubmitHandler<SimpleFormSchemaType> = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+      <input
+        className="flex border"
+        {...register("email", { required: true })}
+      />
+      {errors.email && (
+        <span className="flex text-red-600">This field is required</span>
+      )}
+      <input className="flex bg-neutral-800 text-white" type="submit" />
+    </form>
+  );
+}
+```
+
+This minimal form includes an `email` field with client-side validation. Submitting logs the data to the console, but it won’t work without JavaScript. Let’s fix that next.
+
+## Supporting Forms Without JavaScript
+
+To handle submissions without JavaScript, we’ll use TanStack Start’s Server Functions. Here’s an example in `src/app/home/actions.ts`:
+
+```tsx
+export const registerSimpleForm = createServerFn({
+  method: "POST",
+  response: "raw",
+})
+  .validator((data: unknown) => {
+    if (!(data instanceof FormData)) {
+      throw new Error("Expected FormData");
+    }
+    return data;
+  })
+  .handler(async ({ data }) => {
+    const formObject = Object.fromEntries(data.entries());
+    const result = SimpleFormSchema.safeParse(formObject);
+
+    return new Response(
+      JSON.stringify({
+        success: result.success,
+        data: result.success ? result.data : result.error.format(),
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+        status: result.success ? 200 : 400,
+      }
+    );
+  });
+```
+
+Update the form to use this server function:
+
+```tsx
+<form
+  method="POST"
+  action={registerSimpleForm.url}
+  className="flex flex-col gap-4"
+>
+  ...
+</form>
+```
+
+Submitting now sends the form to the server, but the browser redirects to a strange URL (e.g., `/_server/...`). To stay on the same page, we’ll use cookies and a redirect.
+
+## Creating Reusable Form Helpers
+
+Let’s extract validation and response logic into reusable utilities in `src/lib/form-helper.ts`.
+
+### Validate Form Data
+
+```tsx
+import { ZodSchema } from "zod";
+
+interface ValidationResult<T> {
+  success: true;
+  message?: string;
+  data: T;
+}
+
+type FormDataObject = Record<string, any>;
+
+interface ValidationError {
+  success: false;
+  data: FormDataObject;
+  errors: Record<string, string>;
+}
+
+export type ValidationResponse<T> = ValidationResult<T> | ValidationError;
+
+export const validateData = <T,>(
+  data: FormData,
+  schema: ZodSchema<T>
+): ValidationResponse<T> => {
+  const formObject = Object.fromEntries(data.entries()) as FormDataObject;
+  const result = schema.safeParse(formObject);
+  if (result.error) {
+    return {
+      data: formObject,
+      success: false,
+      errors: Object.fromEntries(
+        result.error.issues?.map((issue) => [issue.path[0], issue.message]) ||
+          []
+      ),
+    };
+  }
+  return { success: true, data: result.data };
+};
+```
+
+The `validateData` function takes form data and its `ZodSchema`, returning an object with `success`, user input, and errors if validation fails. This ensures reusable validation across multiple forms.
+
+### Generate Server Response
+
+For responses, we'll create a utility function to keep `registerSimpleForm` clean and reuse logic across the app.
+
+```tsx
+import { getWebRequest } from "@tanstack/react-start/server";
+
+const FLASH_TIMEOUT = 5;
+
+export const generateResponse = <T,>(
+  data: ValidationResponse<T>,
+  status: number = 301
+): Response => {
+  const request = getWebRequest();
+  const responseString = JSON.stringify(data);
+  const responseType = request?.headers.get("X-Response-Type") || "redirect";
+  const headers = new Headers({
+    "Content-Type": "application/json",
+  });
+  const isRedirect = responseType?.includes("redirect");
+
+  if (isRedirect) {
+    const requestSource = new URL(request?.headers.get("referer") || "");
+    headers.set("Location", requestSource.pathname);
+    headers.set(
+      "Set-Cookie",
+      `flashData=${encodeURIComponent(
+        responseString
+      )}; Path=/; Max-Age=${FLASH_TIMEOUT}; Secure; HttpOnly`
+    );
+  }
+  return new Response(responseString, {
+    status: isRedirect ? status : 200,
+    headers,
+  });
+};
+```
+
+Let’s break down the code. This function primarily takes a `data` prop (from `validateData`), with `status` being optional. It accesses the request using TanStack’s built-in `getWebRequest`, checking for the `X-Response-Type` header. By default, it redirects, but when called from JS with a different value, it returns JSON instead.
+
+If redirecting, we set a `flashData` cookie for 5 seconds. Keeping it short ensures fast-loading pages don’t miss essential hints while avoiding unnecessary data retention.
+
+You can view the [full `form-helper.ts` code here](https://github.com/dipankarmaikap/tanstack-react-hook-form/blob/main/src/lib/form-helper.ts).
+
+Now, let’s update `registerSimpleForm` to use it.
+
+### Update the server function:
+
+```tsx
+import { createServerFn } from "@tanstack/react-start";
+import { SimpleFormSchema, type SimpleFormSchemaType } from "~/app/home/schema";
+import { generateResponse, validateData } from "~/lib/form-helper";
+import { delay } from "~/utils/delay";
+
+export const registerSimpleForm = createServerFn({
+  method: "POST",
+  response: "raw",
+})
+  .validator((data: unknown) => {
+    if (!(data instanceof FormData)) throw new Error("Expected FormData");
+    return data;
+  })
+  .handler(async ({ data }) => {
+    await delay(1000);
+    const validationResult = validateData(data, SimpleFormSchema);
+    if (!validationResult.success) {
+      return generateResponse<SimpleFormSchemaType>(validationResult);
+    }
+    if (validationResult.data.email === "admin@gmail.com") {
+      return generateResponse<SimpleFormSchemaType>({
+        success: false,
+        data: validationResult.data,
+        errors: { email: "This email is already taken" },
+      });
+    }
+    return generateResponse({ ...validationResult, message: "Success" });
+  });
+```
+
+Now, submitting reloads the page without redirection, storing response data in a flashData cookie.
+
+## Displaying Feedback Without JavaScript
+
+Retrieve the cookie with a new server function in `src/lib/getFlashData.ts`:
+
+```tsx
+import { createServerFn } from "@tanstack/react-start";
+import { getCookie } from "@tanstack/react-start/server";
+
+export const getFlashData = createServerFn().handler(async () => {
+  const cookies = getCookie("flashData");
+  if (!cookies) return null;
+  return JSON.parse(cookies);
+});
+```
+
+Update the route to pass `flashData`:
+
+```tsx
+//src/routes/index.tsx
+import { createFileRoute } from "@tanstack/react-router";
+import SimpleForm from "~/app/home/components/SimpleForm";
+import { type SimpleFormSchemaType } from "~/app/home/schema";
+import { type ValidationResponse } from "~/lib/form-helper";
+import { getFlashData } from "~/lib/getFlashData";
+
+export const Route = createFileRoute("/")({
+  component: RouteComponent,
+  loader: async () => {
+    const flashData =
+      (await getFlashData()) as ValidationResponse<SimpleFormSchemaType> | null;
+    return {
+      name: "Home",
+      flashData,
+    };
+  },
+});
+```
+
+Update `SimpleForm.tsx` to display feedback:
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { registerSimpleForm } from "~/app/home/actions";
+import { SimpleFormSchema, type SimpleFormSchemaType } from "~/app/home/schema";
+import { Route } from "~/routes";
+
+export default function SimpleForm() {
+  const simpleForm = useForm<SimpleFormSchemaType>({
+    resolver: zodResolver(SimpleFormSchema),
+  });
+  const { register, handleSubmit, formState } = simpleForm;
+  const { errors, isSubmitting } = formState;
+
+  const onSubmit: SubmitHandler<SimpleFormSchemaType> = (data) => {
+    console.log(data);
+  };
+
+  const { flashData } = Route.useLoaderData();
+  const haveErrors = flashData?.success === false;
+  const showError = errors?.email || haveErrors;
+
+  return (
+    <form
+      method="POST"
+      action={registerSimpleForm.url}
+      className="flex flex-col gap-4"
+    >
+      <div className="email">
+        <input
+          className="flex border"
+          defaultValue={flashData?.data.email}
+          {...register("email", { required: true })}
+        />
+        <span
+          className={clsx("text-red-600 flex text-sm mt-0.5", {
+            hidden: !showError,
+          })}
+        >
+          {haveErrors
+            ? flashData.errors?.email
+            : errors?.email?.message?.toString()}
+        </span>
+      </div>
+      <input
+        disabled={isSubmitting}
+        className="flex bg-neutral-800 text-white disabled:opacity-60"
+        type="submit"
+        value={isSubmitting ? "Submitting..." : "Submit"}
+      />
+    </form>
+  );
+}
+```
+
+Now, the form provides feedback (e.g., “This field is required” or “This email is already taken”) even without JavaScript.
+
+## Adding JavaScript-Enabled Submission
+
+For JavaScript-enabled clients, implement the `onSubmit` handler:
+
+```tsx
+const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
+  if (!e) return;
+  try {
+    const formData = new FormData(e.target as HTMLFormElement);
+    const response = await submitFormData<
+      ValidationResponse<SimpleFormSchemaType>
+    >(registerSimpleForm.url, formData);
+    if (!response.success) {
+      Object.entries(response.errors).forEach(([field, message]) => {
+        setError(field as keyof SimpleFormSchemaType, {
+          type: "validate",
+          message,
+        });
+      });
+    }
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+//src/lib/submitFormData.ts
+export const submitFormData = async <T,>(
+  url: string,
+  formData: FormData
+): Promise<T> => {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+        "X-Response-Type": "json",
+      },
+    });
+
+    return (await response.json()) as T;
+  } catch (error) {
+    console.error("Network error:", error);
+    throw new Error("Something went wrong. Try again.");
+  }
+};
+```
+
+This fetches the server response as `JSON`, updating the form with errors dynamically.
+
+## Final Thoughts
+
+You now have a fully functional form that:
+
+- Works with or without JavaScript.
+- Validates on both client and server sides.
+- Uses reusable, type-safe code.
+
+Check the [GitHub repo](https://github.com/dipankarmaikap/tanstack-react-hook-form) for a more complex example with a reusable Input component. While this form doesn’t save any data to a database, the structure supports adding database logic or redirects in `registerSimpleForm` ServerFunction.
+
+Happy coding! Questions? [Let me know](https://x.com/maikap_dipankar).
+
+### Resources
+
+- [TanStack Start Documentation](https://tanstack.com/start/latest/docs/framework/react/overview)
+- [React Hook Form Documentation](https://www.react-hook-form.com/get-started/)
+- [GitHub Repository](https://github.com/dipankarmaikap/tanstack-react-hook-form)
+- [Live Demo](https://tanstack-react-hook-form.netlify.app/)
