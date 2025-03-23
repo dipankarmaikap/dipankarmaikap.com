@@ -15,6 +15,7 @@ tags:
     "SEO-Friendly Forms",
   ]
 category: web-development
+image: /og/react-hook-form-with-tanstack-start.jpg
 ---
 
 In this tutorial, we’ll explore how to integrate [React Hook Form](https://www.react-hook-form.com/), a widely-used form library for [React](https://react.dev/), with [TanStack Start](https://tanstack.com/start/latest), an innovative React meta-framework. This guide will walk you through creating a robust, type-safe form that supports both client-side and server-side validation, works with or without JavaScript enabled, and remains reusable across your projects.
@@ -154,7 +155,7 @@ This minimal form includes an `email` field with client-side validation. Submitt
 
 ## Supporting Forms Without JavaScript
 
-To handle submissions without JavaScript, we’ll use TanStack Start’s Server Functions. Here’s an example in `src/app/home/actions.ts`:
+To handle submissions without JavaScript, we’ll use [TanStack Start’s Server Functions](https://tanstack.com/start/latest/docs/framework/react/server-functions). Here’s an example in `src/app/home/actions.ts`:
 
 ```tsx
 export const registerSimpleForm = createServerFn({
@@ -196,7 +197,7 @@ Update the form to use this server function:
 </form>
 ```
 
-Submitting now sends the form to the server, but the browser redirects to a strange URL (e.g., `/_server/...`). To stay on the same page, we’ll use cookies and a redirect.
+Submitting now sends the form to the server, but the browser redirects to the server function's URL (e.g., `/_server/...`). To stay on the same page, we’ll use cookies and a redirect.
 
 ## Creating Reusable Form Helpers
 
@@ -324,7 +325,7 @@ export const registerSimpleForm = createServerFn({
   });
 ```
 
-Now, submitting reloads the page without redirection, storing response data in a flashData cookie.
+Now, submitting reloads the page without redirection, storing response data in a `flashData` cookie.
 
 ## Displaying Feedback Without JavaScript
 
@@ -482,7 +483,7 @@ You now have a fully functional form that:
 - Validates on both client and server sides.
 - Uses reusable, type-safe code.
 
-Check the [GitHub repo](https://github.com/dipankarmaikap/tanstack-react-hook-form) for a more complex example with a reusable Input component. While this form doesn’t save any data to a database, the structure supports adding database logic or redirects in `registerSimpleForm` ServerFunction.
+Check the [GitHub repo](https://github.com/dipankarmaikap/tanstack-react-hook-form) for a more complex example with a reusable Input component. While this form doesn’t yet save data to a database, the structure makes it easy to extend—whether by storing submissions, redirecting users, or adding custom logic.
 
 Happy coding! Questions? [Let me know](https://x.com/maikap_dipankar).
 
