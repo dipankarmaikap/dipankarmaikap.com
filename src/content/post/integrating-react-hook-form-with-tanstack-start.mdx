@@ -18,6 +18,8 @@ category: web-development
 image: /og/react-hook-form-with-tanstack-start.jpg
 ---
 
+import CodeTitle from "~/components/CodeTitle.astro";
+
 In this tutorial, we’ll explore how to integrate [React Hook Form](https://www.react-hook-form.com/), a widely-used form library for [React](https://react.dev/), with [TanStack Start](https://tanstack.com/start/latest), an innovative React meta-framework. This guide will walk you through creating a robust, type-safe form that supports both client-side and server-side validation, works with or without JavaScript enabled, and remains reusable across your projects.
 
 ## Prerequisites
@@ -288,7 +290,7 @@ Let’s break down the code. This function primarily takes a `data` prop (from `
 
 If redirecting, we set a `flashData` cookie for 5 seconds. Keeping it short ensures fast-loading pages don’t miss essential hints while avoiding unnecessary data retention.
 
-You can view the [full `form-helper.ts` code here](https://github.com/dipankarmaikap/tanstack-react-hook-form/blob/main/src/lib/form-helper.ts).
+You can view the full `form-helper.ts` [code here](https://github.com/dipankarmaikap/tanstack-react-hook-form/blob/main/src/lib/form-helper.ts).
 
 Now, let’s update `registerSimpleForm` to use it.
 
@@ -344,8 +346,9 @@ export const getFlashData = createServerFn().handler(async () => {
 
 Update the route to pass `flashData`:
 
+<CodeTitle name="src/routes/index.tsx" />
+
 ```tsx
-//src/routes/index.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import SimpleForm from "~/app/home/components/SimpleForm";
 import { type SimpleFormSchemaType } from "~/app/home/schema";
@@ -429,6 +432,7 @@ Now, the form provides feedback (e.g., “This field is required” or “This e
 
 For JavaScript-enabled clients, implement the `onSubmit` handler:
 
+<CodeTitle name="src/app/home/components/SimpleForm.tsx" />
 ```tsx
 const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
   if (!e) return;
@@ -450,7 +454,11 @@ const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
     console.log(error);
   }
 };
-//src/lib/submitFormData.ts
+```
+
+<CodeTitle name="src/lib/submitFormData.ts" />
+
+```tsx
 export const submitFormData = async <T,>(
   url: string,
   formData: FormData
