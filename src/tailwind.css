@@ -14,7 +14,7 @@
 }
 
 .post pre {
-  @apply p-4 rounded my-4;
+  @apply p-4 rounded my-4 text-lg;
 }
 .post ul {
   @apply list-disc list-inside pl-4 my-4;
