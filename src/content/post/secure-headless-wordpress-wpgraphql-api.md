@@ -60,7 +60,7 @@ Let’s use that Application Password to securely query your WordPress backend.
 
 Never hardcode secrets into your components. Instead, create a `.env.local` file in your frontend project:
 
-```env
+```bash
 # .env.local
 WP_GRAPHQL_URL="https://yourdomain.com/graphql"
 WP_USER="your_wordpress_username"
@@ -155,7 +155,7 @@ const headers = {
 
 **.env.local**
 
-```env
+```bash
 SECRET_HEADER_KEY="a-very-long-random-string"
 ```
 
