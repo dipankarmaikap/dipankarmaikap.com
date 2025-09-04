@@ -64,3 +64,10 @@
 .smooth {
   @apply transition duration-100 ease-in-out;
 }
+
+.post blockquote {
+  @apply border-l-4 border-blue-600 pl-4 py-0.5 italic bg-neutral-100;
+}
+.post hr {
+  @apply text-neutral-200;
+}

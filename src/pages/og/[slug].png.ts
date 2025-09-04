@@ -13,15 +13,15 @@ const userAvatar = siteUrl + "images/dipankar-maikap.jpg";
 export const GET: APIRoute = async ({ props }) => {
   const avatarBase64 = await imageUrlToBase64(userAvatar);
 
-  const svg = await container.renderToString(TemplateOne, {
+  const html = await container.renderToString(TemplateOne, {
     props: {
       title: props.post.data.title,
       avatar: avatarBase64,
     },
   });
-  const resvg = new Resvg(svg);
+  const resvg = new Resvg(html);
   const pngBuffer = resvg.render().asPng();
-  return new Response(pngBuffer, {
+  return new Response(new Uint8Array(pngBuffer), {
     headers: {
       "Content-Type": "image/png",
       "Cache-Control":
