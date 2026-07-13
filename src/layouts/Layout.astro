@@ -3,6 +3,7 @@ import Header from "~/components/Header.astro";
 import Footer from "~/components/Footer.astro";
 import "~/tailwind.css";
 import { siteUrl } from "~/utils/variables";
+import "@fontsource-variable/jetbrains-mono/wght.css";
 
 const feedUrl = siteUrl + "rss.xml";
 ---
@@ -28,13 +29,10 @@ const feedUrl = siteUrl + "rss.xml";
       title="Dipankar Maikap » RSS Feed"
       href={feedUrl}
     />
-    <script
-      defer
-      data-domain="dipankarmaikap.com"
-      src="https://plausible.dip2.in/js/script.js"></script>
   </head>
   <body
-    class="font-serif text-neutral-700 dark:text-neutral-200 dark:bg-neutral-900"
+    class="text-neutral-700 dark:text-neutral-200 dark:bg-neutral-900"
+    style="font-family: JetBrains Mono Variable, monospace;"
   >
     <Header />
     <slot />

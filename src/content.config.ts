@@ -1,5 +1,6 @@
 import { glob } from "astro/loaders";
-import { defineCollection, reference, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 
 const category = defineCollection({
   // Load Markdown and MDX files in the `src/content/category/` directory.
@@ -28,7 +29,7 @@ const post = defineCollection({
       .string()
       .regex(
         /^[a-z0-9-]+$/,
-        "Must be lowercase, no spaces, and only letters, numbers, or hyphens"
+        "Must be lowercase, no spaces, and only letters, numbers, or hyphens",
       ),
     draft: z.boolean().default(false),
   }),

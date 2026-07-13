@@ -9,24 +9,19 @@ const { post } = Astro.props;
 const { remarkPluginFrontmatter } = await render(post);
 ---
 
-<article>
-  <h2 class="leading-tight text-3xl md:text-4xl font-semibold">
-    <a class="hover:text-blue-600 smooth hover:underline" href={`/${post.id}/`}>
-      {post.data.title}
-    </a>
-  </h2>
-  <div class="flex items-center text-neutral-600 dark:text-neutral-400 gap-1">
+<article class="post-item mb-12">
+  <h3 class="text-xl font-bold mb-1">
+    <a href={`/${post.id}/`}>{post.data.title}</a>
+  </h3>
+  <div class="flex items-center opacity-80 mb-4 text-sm gap-1 text-neutral-800">
     <FormattedDate date={post.data.pubDate} />
     <span>-</span>
     <p>
       {remarkPluginFrontmatter?.minutesRead}
     </p>
   </div>
-  <p class="text-xl my-2">{post.data.description}</p>
-  <a
-    class="text-blue-600 hover:text-blue-700 inline-block hover:underline"
-    href={`/${post.id}/`}
-  >
-    Read More »
-  </a>
+  <p class="mb-4 text-sm leading-relaxed max-w-2xl">
+    {post.data.description}
+  </p>
+  <a class="text-sm font-bold" href={`/${post.id}/`}>Read more →</a>
 </article>
