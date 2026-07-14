@@ -36,7 +36,7 @@ const categoryUrl = "/category/" + (category?.id || "web-development");
 
 <Layout>
   <PostMetadata slot="meta" {post} />
-  <article class="px-4 sm:px-8 text-lg md:text-xl">
+  <article class="px-4 sm:px-8 max-w-4xl leading-relaxed">
     <header class="py-4 sm:py-6">
       <a
         class="bg-blue-100 text-blue-900 hover:bg-blue-200 rounded p-1"
@@ -44,7 +44,7 @@ const categoryUrl = "/category/" + (category?.id || "web-development");
       >
         {categoryName}
       </a>
-      <h1 class="text-4xl sm:text-5xl font-bold my-2">
+      <h1 class="text-3xl font-bold mb-2">
         {post.data.title}
       </h1>
       <div

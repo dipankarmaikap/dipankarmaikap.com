@@ -7,8 +7,12 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 import rehypeExternalLinks from "rehype-external-links";
 import vercel from "@astrojs/vercel";
 import { loadEnv } from "vite";
+import { transformerMetaHighlight } from "@shikijs/transformers";
+import { transformerFilename } from "./src/shiki/transformers/filename.mjs";
+
 const env = loadEnv(process.env.NODE_ENV || "", process.cwd(), "");
 const { SITE_URL } = env;
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
@@ -36,6 +40,10 @@ export default defineConfig({
       ],
       remarkPlugins: [remarkReadingTime],
     }),
+    shikiConfig: {
+      theme: "night-owl-light",
+      transformers: [transformerMetaHighlight(), transformerFilename()],
+    },
   },
   vite: {
     plugins: [tailwindcss()],

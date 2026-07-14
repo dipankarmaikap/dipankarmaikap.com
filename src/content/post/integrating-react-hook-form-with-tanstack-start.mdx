@@ -182,7 +182,7 @@ export const registerSimpleForm = createServerFn({
       {
         headers: { "Content-Type": "application/json" },
         status: result.success ? 200 : 400,
-      }
+      },
     );
   });
 ```
@@ -228,7 +228,7 @@ export type ValidationResponse<T> = ValidationResult<T> | ValidationError;
 
 export const validateData = <T,>(
   data: FormData,
-  schema: ZodSchema<T>
+  schema: ZodSchema<T>,
 ): ValidationResponse<T> => {
   const formObject = Object.fromEntries(data.entries()) as FormDataObject;
   const result = schema.safeParse(formObject);
@@ -238,7 +238,7 @@ export const validateData = <T,>(
       success: false,
       errors: Object.fromEntries(
         result.error.issues?.map((issue) => [issue.path[0], issue.message]) ||
-          []
+          [],
       ),
     };
   }
@@ -259,7 +259,7 @@ const FLASH_TIMEOUT = 5;
 
 export const generateResponse = <T,>(
   data: ValidationResponse<T>,
-  status: number = 301
+  status: number = 301,
 ): Response => {
   const request = getWebRequest();
   const responseString = JSON.stringify(data);
@@ -275,8 +275,8 @@ export const generateResponse = <T,>(
     headers.set(
       "Set-Cookie",
       `flashData=${encodeURIComponent(
-        responseString
-      )}; Path=/; Max-Age=${FLASH_TIMEOUT}; Secure; HttpOnly`
+        responseString,
+      )}; Path=/; Max-Age=${FLASH_TIMEOUT}; Secure; HttpOnly`,
     );
   }
   return new Response(responseString, {
@@ -432,8 +432,9 @@ Now, the form provides feedback (e.g., “This field is required” or “This e
 
 For JavaScript-enabled clients, implement the `onSubmit` handler:
 
-<CodeTitle name="src/app/home/components/SimpleForm.tsx" />
-```tsx
+{/* <CodeTitle name="src/app/home/components/SimpleForm.tsx" /> */}
+
+```tsx src/app/home/components/SimpleForm.tsx
 const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
   if (!e) return;
   try {
@@ -461,7 +462,7 @@ const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
 ```tsx
 export const submitFormData = async <T,>(
   url: string,
-  formData: FormData
+  formData: FormData,
 ): Promise<T> => {
   try {
     const response = await fetch(url, {

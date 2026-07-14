@@ -12,13 +12,6 @@ a {
 .post a {
   @apply text-blue-600 underline;
 }
-.post code {
-  @apply bg-neutral-200 dark:bg-neutral-700 px-1 rounded break-words;
-}
-
-.post pre {
-  @apply p-4 rounded my-4 text-lg;
-}
 .post ul {
   @apply list-disc list-inside pl-4 my-4;
 }
@@ -28,42 +21,16 @@ a {
 .post li {
   @apply my-2;
 }
-.post pre code {
-  @apply bg-transparent;
-}
 .post p {
-  @apply my-4 leading-normal;
+  @apply my-2;
 }
 .post h2 {
-  @apply font-semibold text-3xl my-4;
-}
-.post h3 {
   @apply font-semibold text-2xl my-4;
 }
-.post pre::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.post h3 {
+  @apply font-semibold text-xl my-4;
 }
 
-.post pre::-webkit-scrollbar-track {
-  background: #1e1e1e; /* Dark background */
-  border-radius: 4px;
-}
-
-.post pre::-webkit-scrollbar-thumb {
-  background: #555; /* Darker scrollbar */
-  border-radius: 4px;
-}
-
-.post pre::-webkit-scrollbar-thumb:hover {
-  background: #777; /* Lighter on hover */
-}
-
-/* For Firefox */
-.post pre {
-  scrollbar-width: thin;
-  scrollbar-color: #555 #1e1e1e;
-}
 .smooth {
   @apply transition duration-100 ease-in-out;
 }
@@ -73,4 +40,14 @@ a {
 }
 .post hr {
   @apply text-neutral-200;
+}
+
+.post pre {
+  @apply p-4 rounded my-4;
+}
+.post code {
+  @apply bg-[#FBFBFB] px-1 rounded break-words;
+}
+.post pre code {
+  @apply bg-transparent;
 }
