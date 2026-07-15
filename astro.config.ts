@@ -8,7 +8,9 @@ import rehypeExternalLinks from "rehype-external-links";
 import vercel from "@astrojs/vercel";
 import { loadEnv } from "vite";
 import { transformerMetaHighlight } from "@shikijs/transformers";
-import { transformerFilename } from "./src/shiki/transformers/filename.mjs";
+import { transformerCodeOptions } from "./src/shiki/transformers/options";
+import { transformerCodeHeader } from "./src/shiki/transformers/header";
+import { transformerCodeBase } from "./src/shiki/transformers/base";
 
 const env = loadEnv(process.env.NODE_ENV || "", process.cwd(), "");
 const { SITE_URL } = env;
@@ -41,8 +43,13 @@ export default defineConfig({
       remarkPlugins: [remarkReadingTime],
     }),
     shikiConfig: {
-      theme: "night-owl-light",
-      transformers: [transformerMetaHighlight(), transformerFilename()],
+      theme: "github-light",
+      transformers: [
+        transformerMetaHighlight(),
+        transformerCodeBase(),
+        transformerCodeOptions(),
+        transformerCodeHeader(),
+      ],
     },
   },
   vite: {

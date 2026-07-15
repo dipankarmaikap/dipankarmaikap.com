@@ -105,3 +105,23 @@ const categoryUrl = "/category/" + (category?.id || "web-development");
     </footer>
   </article>
 </Layout>
+
+<script>
+  document
+    .querySelectorAll<HTMLButtonElement>(".code-copy")
+    .forEach((button) => {
+      button.addEventListener("click", async () => {
+        const pre = button.closest("pre");
+        if (!pre) return;
+
+        const code = pre.getAttribute("data-code");
+        if (!code) return;
+
+        await navigator.clipboard.writeText(code);
+        button.textContent = "Copied!";
+        setTimeout(() => {
+          button.textContent = "Copy";
+        }, 1500);
+      });
+    });
+</script>
