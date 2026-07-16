@@ -70,7 +70,7 @@ These files don’t exist yet—they’re examples of how we’ll organize the c
 
 Start by defining a route in `src/routes/index.tsx`:
 
-```tsx
+```tsx src/routes/index.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import SimpleForm from "~/app/home/components/SimpleForm";
 
@@ -100,9 +100,9 @@ function RouteComponent() {
 
 ## Defining the Form Schema
 
-Create a schema with Zod for type safety and reusability in `src/app/home/schema.ts`:
+Create a schema with Zod for type safety and reusability.
 
-```tsx
+```tsx src/app/home/schema.ts
 import { z } from "zod";
 
 const SimpleFormSchema = z.object({
@@ -200,11 +200,11 @@ Submitting now sends the form to the server, but the browser redirects to the se
 
 ## Creating Reusable Form Helpers
 
-Let’s extract validation and response logic into reusable utilities in `src/lib/form-helper.ts`.
+Let’s extract validation and response logic into reusable utility.
 
 ### Validate Form Data
 
-```tsx
+```tsx src/lib/form-helper.ts
 import { ZodSchema } from "zod";
 
 interface ValidationResult<T> {
@@ -330,7 +330,7 @@ Now, submitting reloads the page without redirection, storing response data in a
 
 Retrieve the cookie with a new server function in `src/lib/getFlashData.ts`:
 
-```tsx
+```tsx src/lib/getFlashData.ts
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie } from "@tanstack/react-start/server";
 

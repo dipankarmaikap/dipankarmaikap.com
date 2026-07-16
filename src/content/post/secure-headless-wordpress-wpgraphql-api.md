@@ -65,8 +65,7 @@ Let’s use that Application Password to securely query your WordPress backend.
 
 Never hardcode secrets into your components. Instead, create a `.env.local` file in your frontend project:
 
-```bash
-# .env.local
+```bash .env.local
 WP_GRAPHQL_URL="https://yourdomain.com/graphql"
 WP_USER="your_wordpress_username"
 WP_APP_PASSWORD="your-generated-app-password"
@@ -78,9 +77,7 @@ WP_APP_PASSWORD="your-generated-app-password"
 
 Here’s a safe `fetchAPI` function you can reuse across your app:
 
-```javascript
-// lib/graphql.js
-
+```javascript lib/graphql.js
 /**
  * Perform an authenticated fetch to the WordPress GraphQL API.
  * @param {string} query - The GraphQL query string.
@@ -158,9 +155,7 @@ const headers = {
 };
 ```
 
-**.env.local**
-
-```bash
+```bash .env.local
 SECRET_HEADER_KEY="a-very-long-random-string"
 ```
 

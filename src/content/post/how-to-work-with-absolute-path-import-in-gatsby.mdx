@@ -38,7 +38,7 @@ Here’s how I made it work.
 
 Gatsby provides plugins for this, but they often don’t work well with VS Code’s "Go to Definition." Instead, you can configure Webpack manually in `gatsby-node.js`:
 
-```js
+```js gatsby-node.js
 const path = require("path");
 
 exports.onCreateWebpackConfig = ({ actions }) => {
@@ -69,7 +69,7 @@ Even with Webpack aliasing, VS Code may not recognize the paths, making navigati
 
 To fix this, add a `tsconfig.json` (for TypeScript) or `jsconfig.json` (for JavaScript) in the root of your project:
 
-```json
+```json tsconfig.json
 {
   "compilerOptions": {
     "baseUrl": "./",

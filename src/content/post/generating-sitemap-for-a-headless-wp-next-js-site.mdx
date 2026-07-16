@@ -91,9 +91,9 @@ To retrieve sitemap data from WordPress, install the [**WP Sitemap REST API Plug
 
 ## Creating a Sitemap Index Page in Next.js
 
-In your Next.js project, create a new file at `pages/sitemap.xml.js`:
+In your Next.js project, create a new file named `sitemap.xml.js` in the `pages` directory.
 
-```javascript
+```javascript pages/sitemap.xml.js
 import getSitemapPages from "~/utils/getSitemapPages";
 import getTotalCounts from "~/lib/getTotalCounts";
 
@@ -112,7 +112,7 @@ export async function getServerSideProps({ res }) {
   res.setHeader("Content-Type", "text/xml; charset=utf-8");
   res.setHeader(
     "Cache-Control",
-    "public, s-maxage=600, stale-while-revalidate=600"
+    "public, s-maxage=600, stale-while-revalidate=600",
   );
   res.write(sitemapIndex);
   res.end();
@@ -125,7 +125,7 @@ As you can see in the above code, this will be an SSR page since we want it to b
 
 ### Fetching Total Counts `getTotalCounts()`
 
-```javascript
+```javascript utils/getTotalCounts.js
 import axios from "axios";
 import { wordpressUrl } from "~/utils/variables";
 
@@ -151,7 +151,7 @@ The returned data is an array containing the name and total count of each item. 
 
 ### Generating Sitemap Pages `getSitemapPages()`
 
-```javascript
+```javascript utils/getSitemapPages.js
 import { frontendUrl, sitemapPerPage } from "./variables";
 
 export default function getSitemapPages(item) {
@@ -165,7 +165,7 @@ export default function getSitemapPages(item) {
               ${url}
           </loc>
       </sitemap>
-      `
+      `,
     );
   }
   return items.join("");
@@ -207,7 +207,7 @@ You can view a [live example of the site here](https://nextjs-wordpress-ashen.ve
 
 In your `pages` folder, create a file named `[slug].js` inside the `sitemap` folder: `pages/sitemap/[slug].js`.
 
-```javascript
+```javascript pages/sitemap/[slug].js
 import getSitemapPageUrls from "~/lib/getSitemapPageUrls";
 import getTotalCounts from "~/lib/getTotalCounts";
 import generateSitemapPaths from "~/utils/generateSitemapPaths";
@@ -246,7 +246,7 @@ export async function getServerSideProps({ res, params: { slug } }) {
   res.setHeader("Content-Type", "text/xml; charset=utf-8");
   res.setHeader(
     "Cache-Control",
-    "public, s-maxage=600, stale-while-revalidate=600"
+    "public, s-maxage=600, stale-while-revalidate=600",
   );
   res.write(sitemap);
   res.end();
@@ -264,26 +264,26 @@ Next, you should validate the extracted values to ensure they follow the sitemap
 
 ### Fetching Sitemap Page URLs `getSitemapPageUrls()`
 
-```javascript
+```javascript utils/getSitemapPageUrls.js
 import axios from "axios";
 import { sitemapPerPage, wordpressUrl } from "~/utils/variables";
 
 export default async function getSitemapPageUrls({ type, page }) {
   if (type === "category" || type === "tag") {
     const res = await axios.get(
-      `${wordpressUrl}/wp-json/sitemap/v1/taxonomy?pageNo=${page}&taxonomyType=${type}&perPage=${sitemapPerPage}`
+      `${wordpressUrl}/wp-json/sitemap/v1/taxonomy?pageNo=${page}&taxonomyType=${type}&perPage=${sitemapPerPage}`,
     );
     return (await res?.data) ?? [];
   }
   if (type === "user") {
     const res = await axios.get(
-      `${wordpressUrl}/wp-json/sitemap/v1/author?pageNo=${page}&perPage=${sitemapPerPage}`
+      `${wordpressUrl}/wp-json/sitemap/v1/author?pageNo=${page}&perPage=${sitemapPerPage}`,
     );
     return (await res?.data) ?? [];
   }
 
   const res = await axios.get(
-    `${wordpressUrl}/wp-json/sitemap/v1/posts?pageNo=${page}&postType=${type}&perPage=${sitemapPerPage}`
+    `${wordpressUrl}/wp-json/sitemap/v1/posts?pageNo=${page}&postType=${type}&perPage=${sitemapPerPage}`,
   );
   return (await res?.data) ?? [];
 }
@@ -301,7 +301,7 @@ Once we retrieve the URLs for any page type, we need to generate the paths. For 
 
 ### Generating Sitemap Paths `generateSitemapPaths()`
 
-```javascript
+```javascript utils/generateSitemapPaths.js
 import { frontendUrl } from "./variables";
 
 export default function generateSitemapPaths(array) {
@@ -320,7 +320,7 @@ export default function generateSitemapPaths(array) {
                     : ""
                 }
             </url>
-            `
+            `,
   );
   return items.join("");
 }

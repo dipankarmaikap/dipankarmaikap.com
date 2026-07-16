@@ -20,7 +20,7 @@ When migrating a large WordPress site (20K+ posts) to Next.js, maintaining the e
 
 One quick fix is using Next.js `rewrites` to remove `.html` from URLs dynamically:
 
-```javascript
+```javascript next.config.js
 module.exports = {
   async rewrites() {
     return [
@@ -39,9 +39,7 @@ Add this to `next.config.js` to handle requests, but note that this is a workaro
 
 By default, Next.js generates `.html` pages for static routes. To support `.html` in dynamic paths without errors, modify your dynamic post page like this:
 
-### `pages/blog/[...slug].js`
-
-```javascript
+```javascript pages/blog/[...slug].js
 import Layout from "@components/Layout";
 import getPostDetails from "@lib/wordpress/post/getPostDetails";
 import getPostPaths from "@lib/wordpress/post/getPostPaths";

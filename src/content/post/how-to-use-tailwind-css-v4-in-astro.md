@@ -21,7 +21,7 @@ npm install tailwindcss @tailwindcss/vite
 
 Next, add the `@tailwindcss/vite` plugin to your Astro configuration file (`astro.config.mjs`):
 
-```js
+```js astro.config.mjs
 // @ts-check
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
@@ -38,7 +38,7 @@ export default defineConfig({
 
 Create a CSS file (e.g., `tailwind.css`) in your `src` directory and import Tailwind CSS by adding the following line:
 
-```css
+```css src/tailwind.css
 @import "tailwindcss";
 ```
 
@@ -48,15 +48,10 @@ Make sure to reference the `tailwind.css` file you created in the previous step 
 
 ### Import in `layout.astro`
 
-```js
-import "../tailwind.css";
-```
-
 A complete `layout.astro` file may look like this:
 
-```html
+```astro src/layouts/BaseLayout.astro
 ---
-//src/layouts/BaseLayout.astro
 import "../tailwind.css";
 ---
 

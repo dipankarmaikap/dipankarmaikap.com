@@ -63,9 +63,7 @@ This is a standard RSS feed format. More details about RSS feeds can be found on
 
 ## Fetching RSS Feed Data from WordPress
 
-### `getFeedsPosts.js`
-
-```javascript
+```javascript utils/getFeedsPosts.js
 async function getFeedsPosts() {
   const response = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
     method: "POST",
@@ -97,9 +95,7 @@ This fetches the latest 20 posts from WordPress using the built-in `fetch` API i
 
 ## Converting Posts to RSS Feed Format
 
-### `postsToFeed.js`
-
-```javascript
+```javascript utils/postsToFeed.js
 export default async function postsToFeed(blogPosts) {
   let latestPostDate = "";
   let rssItemsXml = "";
@@ -132,9 +128,7 @@ This function converts WordPress post data into an RSS feed format.
 
 ## Creating the `feed.xml` Page
 
-### `pages/feed.xml.js`
-
-```javascript
+```javascript pages/feed.xml.js
 import getFeedsPosts from "@/lib/wordpress/getFeedsPosts";
 import postsToFeed from "@/lib/wordpress/postsToFeed";
 
@@ -158,7 +152,7 @@ function Feeds(feed) {
               <description>Site description</description>
               <language>en-US</language>
               <lastBuildDate>${new Date(
-                latestPostDate
+                latestPostDate,
               ).toUTCString()}</lastBuildDate>
               ${rssItemsXml}
           </channel>
