@@ -3,20 +3,18 @@ import { experimental_AstroContainer } from "astro/container";
 import TemplateOne from "~/components/og/TemplateOne.astro";
 import { Resvg } from "@resvg/resvg-js";
 import { getPosts } from "~/utils/getPosts";
-import { siteUrl } from "~/utils/variables";
-import { imageUrlToBase64 } from "~/utils/imageUrlToBase64";
 
 const container = await experimental_AstroContainer.create();
 export const prerender = true;
-const userAvatar = siteUrl + "images/dipankar-maikap.jpg";
 
 export const GET: APIRoute = async ({ props }) => {
-  const avatarBase64 = await imageUrlToBase64(userAvatar);
-
   const html = await container.renderToString(TemplateOne, {
     props: {
       title: props.post.data.title,
-      avatar: avatarBase64,
+      category: props.post.data.category,
+      code: props.post.data.ogCode,
+      filename: props.post.data.ogFilename || "src/index.ts",
+      language: props.post.data.ogLanguage || "typescript",
     },
   });
   const resvg = new Resvg(html);

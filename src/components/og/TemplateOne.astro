@@ -1,18 +1,32 @@
 ---
-import { siteUrl } from "~/utils/variables";
-
+import type { BundledLanguage } from "shiki";
+import CodeSnippet from "./CodeSnippet.astro";
+import { codeExamples } from "./data";
 interface Props {
   title: string;
-  avatar?: string;
+  description?: string;
+  date?: string;
+  category?: string;
+  code?: string;
+  filename?: string;
+  language?: BundledLanguage;
 }
-const { title, avatar } = Astro.props;
-function wrapText(text: string, maxCharsPerLine: number) {
+
+const {
+  title,
+  category = "ARTICLE",
+  code = "",
+  filename = "src/index.ts",
+  language = "typescript",
+} = Astro.props;
+
+function wrapText(text: string, maxChars: number) {
   const words = text.split(" ");
-  let lines = [];
+  const lines: string[] = [];
   let line = "";
 
   for (const word of words) {
-    if ((line + word).length > maxCharsPerLine) {
+    if ((line + word).length > maxChars) {
       lines.push(line.trim());
       line = word + " ";
     } else {
@@ -24,74 +38,125 @@ function wrapText(text: string, maxCharsPerLine: number) {
 
   return lines;
 }
-const maxCharsPerLine = 40; // Adjust based on font size
-const lines = wrapText(title, maxCharsPerLine);
-const profile = avatar || siteUrl + "images/dipankar-maikap.jpg";
+
+const titleLines = wrapText(title, code ? 22 : 28);
+
+const example = codeExamples[Math.floor(Math.random() * codeExamples.length)];
 ---
 
 <svg
+  xmlns="http://www.w3.org/2000/svg"
   width="1200"
   height="630"
   viewBox="0 0 1200 630"
-  xmlns="http://www.w3.org/2000/svg"
 >
-  <!-- Background -->
-  <rect width="100%" height="100%" fill="#fffaf4"></rect>
+  <!-- background -->
+  <rect width="1200" height="630" fill="#ffffff"></rect>
 
-  <!-- Title -->
+  <!-- border -->
+  <rect
+    x="16"
+    y="16"
+    width="1168"
+    height="598"
+    fill="none"
+    stroke="#111"
+    stroke-width="2"></rect>
+
+  <!-- header -->
   <text
-    x="50%"
-    y="35%"
-    font-size="48"
-    fill="#333"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-weight="bold"
+    x="70"
+    y="90"
+    font-size="34"
+    font-family="'IBM Plex Mono', monospace"
+    font-weight="700"
+    fill="#111"
+  >
+    Dipankar Maikap
+  </text>
+
+  <text
+    x="70"
+    y="125"
+    font-size="18"
+    font-family="'JetBrains Mono', monospace"
+    fill="#444"
+  >
+    Developer Experience Engineer · Technical Writer
+  </text>
+
+  <text
+    x="1110"
+    y="90"
+    text-anchor="end"
+    font-size="44"
+    font-family="'IBM Plex Mono', monospace"
+    fill="#111"
+  >
+    &lt;/&gt;
+  </text>
+
+  <!-- category -->
+
+  <text
+    x="70"
+    y="205"
+    font-size="18"
+    font-weight="700"
+    fill="#2155ff"
+    font-family="'IBM Plex Mono', monospace"
+  >
+    {category.toUpperCase()}
+  </text>
+
+  <!-- title -->
+
+  <text
+    x="70"
+    y="285"
+    font-size="52"
+    font-weight="700"
+    fill="#111"
+    font-family="'IBM Plex Mono', monospace"
   >
     {
-      lines.map((line, i) => (
-        <tspan x="50%" dy={i === 0 ? "0" : "1.4em"}>
+      titleLines.map((line, index) => (
+        <tspan x="70" dy={index === 0 ? 0 : 64}>
           {line}
         </tspan>
       ))
     }
   </text>
-
-  <!-- Writer Section -->
-  <defs>
-    <clipPath id="clipCircle">
-      <circle cx="600" cy="480" r="30"></circle>
-    </clipPath>
-  </defs>
-
-  <image
-    href={profile}
-    x="570"
-    y="450"
-    width="60"
-    height="60"
-    clip-path="url(#clipCircle)"
+  <CodeSnippet
+    filename={code.length > 0 ? filename : example.filename}
+    language={code.length > 0 ? language : example.language}
+    code={code.length > 0 ? code : example.code}
   />
+
+  <!-- footer line -->
+
+  <line x1="70" y1="560" x2="1130" y2="560" stroke="#111"></line>
+
+  <!-- footer -->
+
   <text
-    x="600"
-    y="535"
-    font-size="32"
-    fill="#333"
-    margin-top="5px"
-    text-anchor="middle"
-    dominant-baseline="middle"
-  >
-    Dipanakr Maikap
-  </text>
-  <text
-    x="600"
-    y="565"
+    x="70"
+    y="595"
     font-size="18"
-    fill="#333"
-    margin-top="5px"
-    text-anchor="middle"
-    dominant-baseline="middle"
+    fill="#111"
+    font-family="'IBM Plex Mono', monospace"
   >
-    Developer Relations Engineer <tspan fill="#0073e8">@storyblok</tspan>.
+    dipankarmaikap.com
+  </text>
+
+  <text
+    x="1130"
+    y="595"
+    text-anchor="end"
+    font-size="18"
+    fill="#111"
+    font-family="'IBM Plex Mono', monospace"
+  >
+    Built with <tspan fill="#e11d48">❤</tspan> and passion
   </text>
 </svg>

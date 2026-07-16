@@ -14,7 +14,12 @@ tags:
     "WordPress GraphQL endpoint",
   ]
 category: wordpress
-image: /og/secure-headless-wordpress-wpgraphql-api.png
+ogFilename: functions.php
+ogLanguage: php
+ogCode: |-
+  add_action('rest_api_init', function () {
+      register_rest_route('demo/v1', '/ping');
+  });
 ---
 
 Going headless with WordPress is awesome. You get a world-class CMS on the backend and the freedom to use modern frontend frameworks like Astro, Next.js, Nuxt, or SvelteKit. But with this new architecture comes a new set of security considerations.

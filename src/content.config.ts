@@ -32,6 +32,9 @@ const post = defineCollection({
         "Must be lowercase, no spaces, and only letters, numbers, or hyphens",
       ),
     draft: z.boolean().default(false),
+    ogFilename: z.string().optional(),
+    ogLanguage: z.string().optional(),
+    ogCode: z.string().optional(),
   }),
 });
 
