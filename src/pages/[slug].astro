@@ -6,6 +6,7 @@ import PostMetadata from "~/components/seo/PostMetadata.astro";
 import FormattedDate from "~/components/FormattedDate.astro";
 import AuthorBio from "~/components/post/AuthorBio.astro";
 import { getPosts } from "~/utils/getPosts";
+import Sidebar from "~/components/Sidebar.astro";
 
 export const prerender = true;
 export async function getStaticPaths() {
@@ -19,7 +20,7 @@ export async function getStaticPaths() {
       (p) => p.id !== post.id && p.id !== prevPost?.id && p.id !== nextPost?.id,
     );
     // Shuffle and select 5 random posts for "More Links"
-    const moreLinks = otherPosts.sort(() => 0.5 - Math.random()).slice(0, 5);
+    const moreLinks = otherPosts.sort(() => 0.5 - Math.random()).slice(0, 3);
     return {
       params: { slug: post.id },
       props: { post, nextPost, prevPost, moreLinks },
@@ -29,81 +30,77 @@ export async function getStaticPaths() {
 const { post, nextPost, prevPost, moreLinks } = Astro.props;
 
 const { Content, remarkPluginFrontmatter } = await render(post);
-const category = await getEntry("category", post.data.category);
-const categoryName = category?.data.title || "Web Development";
-const categoryUrl = "/category/" + (category?.id || "web-development");
 ---
 
 <Layout>
   <PostMetadata slot="meta" {post} />
-  <article class="px-4 sm:px-8 max-w-4xl leading-relaxed">
-    <header class="py-4 sm:py-6">
-      <a
-        class="bg-blue-100 text-blue-900 hover:bg-blue-200 rounded p-1"
-        href={categoryUrl}
-      >
-        {categoryName}
-      </a>
-      <h1 class="text-3xl font-bold mb-2">
-        {post.data.title}
-      </h1>
-      <div
-        class="flex items-center dark:text-neutral-400 text-neutral-600 gap-1 text-lg"
-      >
-        <FormattedDate date={post.data.pubDate} />
-        <span>-</span>
-        <span>
-          {remarkPluginFrontmatter?.minutesRead}
-        </span>
+  <main
+    class="container grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-12 px-4 sm:px-8"
+  >
+    <article class="max-w-3xl text-sm leading-relaxed">
+      <header class="pb-4 sm:pb-6">
+        <a href="/"> ← Back to all posts </a>
+        <h1 class="text-2xl font-bold my-2">
+          {post.data.title}
+        </h1>
+        <div
+          class="flex items-center dark:text-neutral-400 text-neutral-600 gap-1"
+        >
+          <FormattedDate date={post.data.pubDate} />
+          <span>-</span>
+          <span>
+            {remarkPluginFrontmatter?.minutesRead}
+          </span>
+        </div>
+      </header>
+      <div class="content post">
+        <Content />
       </div>
-    </header>
-    <div class="content post">
-      <Content />
-    </div>
-    <footer>
-      <AuthorBio />
-      <div class="nav-links flex flex-col gap-4 text-xl sm:text-2xl">
-        {
-          prevPost && (
-            <a
-              class="flex flex-col text-blue-600 hover:underline"
-              href={`/${prevPost.id}/`}
-            >
-              <span>← Previous:</span> <span>{prevPost.data.title}</span>
-            </a>
-          )
-        }
-        {
-          nextPost && (
-            <a
-              class="flex flex-col text-blue-600 hover:underline "
-              href={`/${nextPost.id}/`}
-            >
-              <span>Next: →</span>
-              <span>{nextPost.data.title}</span>
-            </a>
-          )
-        }
-      </div>
-      <div class="more-posts mt-6">
-        <p class="text-2xl sm:text-3xl font-semibold">More posts</p>
-        <ul class="flex flex-col gap-4 sm:gap-2 mt-2 text-xl leading-6">
+      <footer>
+        <div class="nav-links flex flex-col gap-4">
           {
-            moreLinks.map((post) => (
-              <li>
-                <a
-                  class="text-blue-600 hover:text-blue-500 hover:underline"
-                  href={`/${post.id}/`}
-                >
-                  {post.data.title}
-                </a>
-              </li>
-            ))
+            prevPost && (
+              <a
+                class="flex flex-col text-blue-600 hover:underline"
+                href={`/${prevPost.id}/`}
+              >
+                <span>← Previous:</span> <span>{prevPost.data.title}</span>
+              </a>
+            )
           }
-        </ul>
-      </div>
-    </footer>
-  </article>
+          {
+            nextPost && (
+              <a
+                class="flex flex-col text-blue-600 hover:underline "
+                href={`/${nextPost.id}/`}
+              >
+                <span>Next: →</span>
+                <span>{nextPost.data.title}</span>
+              </a>
+            )
+          }
+        </div>
+        <div class="more-posts mt-6">
+          <p class="text-lg font-bold">More posts</p>
+          <ul class="flex flex-col gap-4 sm:gap-2 mt-2">
+            {
+              moreLinks.map((post) => (
+                <li>
+                  <a
+                    class="text-blue-600 hover:text-blue-500 hover:underline"
+                    href={`/${post.id}/`}
+                  >
+                    {post.data.title}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </footer>
+    </article>
+    <Sidebar />
+  </main>
 </Layout>
 
 <script>

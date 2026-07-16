@@ -45,7 +45,6 @@ export default defineConfig({
     shikiConfig: {
       theme: "github-light",
       transformers: [
-        transformerMetaHighlight(),
         transformerCodeBase(),
         transformerCodeOptions(),
         transformerCodeHeader(),

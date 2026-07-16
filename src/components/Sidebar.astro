@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+
+const categories = await getCollection("category");
+---
+
+<aside class="space-y-12 sticky top-4" data-purpose="sidebar">
+  <!-- About Section -->
+  <section data-purpose="sidebar-about">
+    <h4 class="text-lg font-bold mb-4">About</h4>
+    <p class="text-sm leading-relaxed mb-4">
+      I write about TypeScript, React, Astro, APIs, documentation, and the
+      engineering behind great developer experiences.
+    </p>
+    <a class="text-sm" href="/about/">More about me →</a>
+  </section>
+  <!-- Topics Section -->
+  <section data-purpose="sidebar-topics">
+    <h4 class="text-lg font-bold mb-4">Topics</h4>
+    <ul class="space-y-2 text-sm">
+      {
+        categories.map((category) => (
+          <li>
+            <span class="mr-1">•</span>
+            <a href={`/category/${category.id}/`}>{category.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <!-- Newsletter Section -->
+  <section data-purpose="sidebar-subscription">
+    <h4 class="text-lg font-bold mb-4">Stay in the loop</h4>
+    <p class="text-sm leading-relaxed mb-4">
+      Subscribe via <a href="/rss.xml">RSS</a> to get the latest posts.
+    </p>
+    <a class="text-sm block" href="/rss.xml">RSS Feed</a>
+  </section>
+</aside>

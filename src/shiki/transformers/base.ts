@@ -8,7 +8,7 @@ export function transformerCodeBase(): ShikiTransformer {
     pre(node) {
       const props = (node.properties ??= {});
 
-      props.class = ["code-block"];
+      props.class = ["code-block", "shiki"];
       props["data-code"] = this.source;
 
       props["data-meta"] = this.options.meta?.__raw ?? "";

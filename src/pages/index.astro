@@ -4,6 +4,7 @@ import PostCard from "~/components/post/PostCard.astro";
 import { getPaginatedPosts } from "~/utils/getPaginatedPosts";
 import Pagination from "~/components/Pagination.astro";
 import ArchivePageMeta from "~/components/seo/ArchivePageMeta.astro";
+import Sidebar from "~/components/Sidebar.astro";
 
 const pageNo = 1;
 const { paginatedPosts, hasNext, hasPrev, totalPages } =
@@ -22,17 +23,22 @@ export const prerender = true;
     {hasNext}
     {pageNo}
   />
-  <section class="px-4 sm:px-8">
-    <h1 class="text-2xl font-bold mb-8">Latest posts</h1>
-    <ul class="flex flex-col">
-      {
-        paginatedPosts.map((post) => (
-          <li>
-            <PostCard {post} />
-          </li>
-        ))
-      }
-    </ul>
-    <Pagination {hasNext} {hasPrev} {totalPages} {pageNo} />
-  </section>
+  <main
+    class="container grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 px-4 sm:px-8"
+  >
+    <section class="blog-feed max-w-3xl">
+      <h1 class="text-2xl font-bold mb-8">Latest posts</h1>
+      <ul class="flex flex-col">
+        {
+          paginatedPosts.map((post) => (
+            <li>
+              <PostCard {post} />
+            </li>
+          ))
+        }
+      </ul>
+      <Pagination {hasNext} {hasPrev} {totalPages} {pageNo} />
+    </section>
+    <Sidebar />
+  </main>
 </Layout>
