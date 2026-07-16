@@ -15,10 +15,7 @@ tags:
     "SEO-Friendly Forms",
   ]
 category: web-development
-image: /og/react-hook-form-with-tanstack-start.jpg
 ---
-
-import CodeTitle from "~/components/CodeTitle.astro";
 
 In this tutorial, we’ll explore how to integrate [React Hook Form](https://www.react-hook-form.com/), a widely-used form library for [React](https://react.dev/), with [TanStack Start](https://tanstack.com/start/latest), an innovative React meta-framework. This guide will walk you through creating a robust, type-safe form that supports both client-side and server-side validation, works with or without JavaScript enabled, and remains reusable across your projects.
 
@@ -182,7 +179,7 @@ export const registerSimpleForm = createServerFn({
       {
         headers: { "Content-Type": "application/json" },
         status: result.success ? 200 : 400,
-      }
+      },
     );
   });
 ```
@@ -228,7 +225,7 @@ export type ValidationResponse<T> = ValidationResult<T> | ValidationError;
 
 export const validateData = <T,>(
   data: FormData,
-  schema: ZodSchema<T>
+  schema: ZodSchema<T>,
 ): ValidationResponse<T> => {
   const formObject = Object.fromEntries(data.entries()) as FormDataObject;
   const result = schema.safeParse(formObject);
@@ -238,7 +235,7 @@ export const validateData = <T,>(
       success: false,
       errors: Object.fromEntries(
         result.error.issues?.map((issue) => [issue.path[0], issue.message]) ||
-          []
+          [],
       ),
     };
   }
@@ -259,7 +256,7 @@ const FLASH_TIMEOUT = 5;
 
 export const generateResponse = <T,>(
   data: ValidationResponse<T>,
-  status: number = 301
+  status: number = 301,
 ): Response => {
   const request = getWebRequest();
   const responseString = JSON.stringify(data);
@@ -275,8 +272,8 @@ export const generateResponse = <T,>(
     headers.set(
       "Set-Cookie",
       `flashData=${encodeURIComponent(
-        responseString
-      )}; Path=/; Max-Age=${FLASH_TIMEOUT}; Secure; HttpOnly`
+        responseString,
+      )}; Path=/; Max-Age=${FLASH_TIMEOUT}; Secure; HttpOnly`,
     );
   }
   return new Response(responseString, {
@@ -346,9 +343,7 @@ export const getFlashData = createServerFn().handler(async () => {
 
 Update the route to pass `flashData`:
 
-<CodeTitle name="src/routes/index.tsx" />
-
-```tsx
+```tsx src/routes/index.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import SimpleForm from "~/app/home/components/SimpleForm";
 import { type SimpleFormSchemaType } from "~/app/home/schema";
@@ -432,8 +427,7 @@ Now, the form provides feedback (e.g., “This field is required” or “This e
 
 For JavaScript-enabled clients, implement the `onSubmit` handler:
 
-<CodeTitle name="src/app/home/components/SimpleForm.tsx" />
-```tsx
+```tsx src/app/home/components/SimpleForm.tsx
 const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
   if (!e) return;
   try {
@@ -456,12 +450,10 @@ const onSubmit: SubmitHandler<SimpleFormSchemaType> = async (_, e) => {
 };
 ```
 
-<CodeTitle name="src/lib/submitFormData.ts" />
-
-```tsx
-export const submitFormData = async <T,>(
+```ts src/lib/submitFormData.ts
+export const submitFormData = async <T>(
   url: string,
-  formData: FormData
+  formData: FormData,
 ): Promise<T> => {
   try {
     const response = await fetch(url, {

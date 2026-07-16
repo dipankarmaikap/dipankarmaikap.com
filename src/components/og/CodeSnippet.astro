@@ -1,0 +1,69 @@
+---
+import type { BundledLanguage } from "shiki";
+import { highlightForOg } from "./shiki-og";
+interface Props {
+  filename: string;
+  language: BundledLanguage;
+  code: string;
+}
+
+const { filename, language, code } = Astro.props;
+
+const codeLines = code && language ? await highlightForOg(code, language) : [];
+
+const lines =
+  codeLines.length > 8
+    ? [
+        ...codeLines.slice(0, 7),
+        {
+          tokens: [
+            {
+              text: "// ...",
+              color: "#888",
+            },
+          ],
+        },
+      ]
+    : codeLines;
+---
+
+<rect x="720" y="330" width="410" height="200" fill="#fff" stroke="#111"></rect>
+
+<line x1="720" y1="375" x2="1130" y2="375" stroke="#111"></line>
+
+<text
+  x="740"
+  y="355"
+  font-size="18"
+  font-family="'IBM Plex Mono', monospace"
+  fill="#111"
+>
+  {filename}
+</text>
+
+<text
+  x="1105"
+  y="355"
+  text-anchor="end"
+  font-size="18"
+  font-family="'IBM Plex Mono', monospace"
+  fill="#111"
+>
+  {language}
+</text>
+
+{
+  lines.map((line, i) => (
+    <text
+      x="742"
+      y={410 + i * 25}
+      font-size="18"
+      font-family="'IBM Plex Mono', monospace"
+      xml:space="preserve"
+    >
+      {line.tokens.map((token) => (
+        <tspan fill={token.color ?? "#24292f"}>{token.text}</tspan>
+      ))}
+    </text>
+  ))
+}

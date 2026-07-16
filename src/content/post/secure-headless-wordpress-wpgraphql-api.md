@@ -14,7 +14,12 @@ tags:
     "WordPress GraphQL endpoint",
   ]
 category: wordpress
-image: /og/secure-headless-wordpress-wpgraphql-api.png
+ogFilename: functions.php
+ogLanguage: php
+ogCode: |-
+  add_action('rest_api_init', function () {
+      register_rest_route('demo/v1', '/ping');
+  });
 ---
 
 Going headless with WordPress is awesome. You get a world-class CMS on the backend and the freedom to use modern frontend frameworks like Astro, Next.js, Nuxt, or SvelteKit. But with this new architecture comes a new set of security considerations.
@@ -98,7 +103,7 @@ export async function fetchAPI(query, variables = {}) {
     headers["Authorization"] = "Basic " + btoa(`${username}:${password}`);
   } else {
     console.warn(
-      "WordPress credentials not set. Falling back to unauthenticated request."
+      "WordPress credentials not set. Falling back to unauthenticated request.",
     );
   }
 
@@ -161,7 +166,7 @@ SECRET_HEADER_KEY="a-very-long-random-string"
 
 **Nginx config example:**
 
-```nginx
+```nginx nginx.conf
 location = /graphql {
   if ($http_x_secret_request_header != "a-very-long-random-string") {
     return 403; # Forbidden
@@ -180,10 +185,8 @@ location = /graphql {
 
 If you don’t use REST, disable it for anonymous visitors:
 
-```php
+```php functions.php
 <?php
-// functions.php
-
 add_filter('rest_api_init', function () {
     if (!is_user_logged_in()) {
         wp_die(

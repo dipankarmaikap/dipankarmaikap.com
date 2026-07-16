@@ -17,7 +17,7 @@ const { category } = Astro.props;
 
 const posts = await getPosts();
 const postsInCategory = posts.filter(
-  (post) => post.data.category === category.id
+  (post) => post.data.category === category.id,
 );
 
 const { Content } = await render(category);
@@ -31,14 +31,14 @@ const { Content } = await render(category);
     description={category.data.description}
     path={`/category/${category.id}`}
   />
-  <main class="max-w-screen-md mx-auto px-4 pt-6 sm:pt-8">
-    <h1 class="text-4xl sm:text-5xl font-bold mb-4">
+  <main class="max-w-3xl text-sm leading-relaxed px-4 sm:px-8">
+    <h1 class="text-2xl font-bold mb-8">
       Category: {category.data.title}
     </h1>
-    <div class="content post text-lg md:text-xl">
+    <div class="content text-base mb-8">
       <Content />
     </div>
-    <ul class="flex flex-col gap-6 md:gap-8">
+    <ul class="flex flex-col">
       {
         postsInCategory.map((post) => (
           <li>

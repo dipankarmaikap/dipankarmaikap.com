@@ -13,7 +13,7 @@ const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 const getPageHref = (page: number) => (page === 1 ? "/" : `/page/${page}/`);
 ---
 
-<nav class="pagination py-8 text-2xl" aria-label="Pagination">
+<nav class="pagination py-8" aria-label="Pagination">
   <h2 class="sr-only">Paginated Links</h2>
   <div class="flex gap-2">
     {
@@ -43,7 +43,7 @@ const getPageHref = (page: number) => (page === 1 ? "/" : `/page/${page}/`);
           >
             {page}
           </a>
-        )
+        ),
       )
     }
     {
