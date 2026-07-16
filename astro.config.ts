@@ -43,7 +43,10 @@ export default defineConfig({
       remarkPlugins: [remarkReadingTime],
     }),
     shikiConfig: {
-      theme: "github-light",
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
       transformers: [
         transformerCodeBase(),
         transformerCodeOptions(),
