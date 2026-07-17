@@ -17,6 +17,14 @@ tags:
     "Next.js headless WordPress",
   ]
 category: headless-cms
+ogFilename: pages/sitemap.xml.js
+ogLanguage: javascript
+ogCode: |-
+  async function getServerSideProps({ res }) {
+    const sitemap = await generateSitemap();
+    res.setHeader("Content-Type", "text/xml");
+    res.end(sitemap);
+  }
 ---
 
 <iframe

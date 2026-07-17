@@ -5,6 +5,13 @@ updatedDate: "Feb 12 2025"
 description: "Learn how to set up Tailwind CSS v4 in an Astro project using the @tailwindcss/vite plugin. Follow this step-by-step guide to integrate Tailwind."
 tags: ["web development", "Tailwind CSS", "Astro", "Tailwind Vite", "Vite"]
 category: web-development
+ogFilename: index.html
+ogLanguage: html
+ogCode: |-
+  <div class="rounded-xl border p-6 shadow">
+    <h2 class="text-xl font-bold">Hello</h2>
+    <p class="font-bold">Tailwind CSS V4</p>
+  </div>
 ---
 
 [Tailwind CSS](https://tailwindcss.com/) is a popular utility-first CSS framework that helps you build modern and responsive web designs efficiently. In this tutorial, we’ll walk through how to set up Tailwind CSS v4 in an [Astro](https://astro.build/) project using the `@tailwindcss/vite` plugin.

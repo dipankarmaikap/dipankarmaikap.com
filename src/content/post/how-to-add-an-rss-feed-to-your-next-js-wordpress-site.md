@@ -16,6 +16,14 @@ tags:
     "Content Syndication",
   ]
 category: headless-cms
+ogFilename: main.js
+ogLanguage: js
+ogCode: |-
+  export async function generateRSS() {
+    const posts = await getPosts();
+    // Convert posts to RSS XML...
+    return createRSS(posts);
+  }
 ---
 
 RSS feeds allow users to subscribe to website updates using feed readers, improving content distribution and engagement. They are especially useful for blogs, news sites, and content-heavy platforms.

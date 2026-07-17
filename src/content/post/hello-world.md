@@ -11,6 +11,14 @@ tags:
     "Learning to Code",
   ]
 category: personal
+ogFilename: main.js
+ogLanguage: js
+ogCode: |-
+  function hello() {
+    console.log("Hello, World!");
+  }
+
+  hello();
 ---
 
 I’m excited to finally launch my blog! I’ve been thinking about starting one for a while, and it’s finally happening. To be honest, I’m both nervous and excited! 😀

@@ -12,6 +12,14 @@ tags:
     "WordPress UI customization",
   ]
 category: wordpress
+ogFilename: theme.ts
+ogLanguage: javascript
+ogCode: |-
+  toggle_theme.onclick = () => {
+
+    let theme = localStorage.getItem("theme");
+    changeTheme(theme);
+  };
 ---
 
 Dark mode is a highly requested feature that enhances user experience by reducing eye strain and improving readability in low-light environments. In this guide, I'll show you how to add dark mode to your WordPress site using CSS and JavaScript.
