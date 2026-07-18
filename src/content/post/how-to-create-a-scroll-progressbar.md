@@ -1,17 +1,17 @@
 ---
-title: "How to create a scroll progressbar"
+title: "How to Create a Scroll Progress Bar"
 pubDate: "November 27 2020"
 updatedDate: "Feb 26 2025"
 description: "Learn how to create a scroll progress bar using JavaScript and CSS. Track scroll percentage and update a progress bar dynamically."
 tags:
   [
-    "scroll progress bar",
-    "javascript progress bar",
-    "css progress bar",
-    "scroll indicator",
-    "web development",
-    "javascript tutorial",
-    "frontend design",
+    "Scroll Progress Bar",
+    "JavaScript Progress Bar",
+    "CSS Progress Bar",
+    "Scroll Indicator",
+    "Web Development",
+    "JavaScript Tutorial",
+    "Frontend Design",
   ]
 category: web-development
 ---

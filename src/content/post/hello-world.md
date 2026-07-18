@@ -5,12 +5,20 @@ updatedDate: "Feb 12 2025"
 description: "Launching my web development blog! Sharing my coding journey, solutions to coding challenges, and insights on learning new technologies."
 tags:
   [
-    "web development",
+    "Web Development",
     "Coding Journey",
     "Self-Taught Developer",
     "Learning to Code",
   ]
 category: personal
+ogFilename: main.js
+ogLanguage: js
+ogCode: |-
+  function hello() {
+    console.log("Hello, World!");
+  }
+
+  hello();
 ---
 
 I’m excited to finally launch my blog! I’ve been thinking about starting one for a while, and it’s finally happening. To be honest, I’m both nervous and excited! 😀

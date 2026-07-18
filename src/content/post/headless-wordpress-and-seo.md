@@ -18,6 +18,14 @@ tags:
   ]
 
 category: headless-cms
+ogFilename: PageSEO.jsx
+ogLanguage: jsx
+ogCode: |-
+  import Head from "next/head";
+  import parse from "html-react-parser";
+  export default function PageSEO({ seoData }) {
+    return <Head>{/* SEO tags... */}</Head>;
+  }
 ---
 
 WordPress is a popular choice for website development, primarily due to its SEO capabilities and ease of content management. With plugins like Yoast SEO, users can optimize content on a per-page basis effortlessly. But what if you're using a headless WordPress setup with [Next.js](https://nextjs.org/)? In this article, we'll explore how to integrate Yoast SEO with [WPGraphQL](https://www.wpgraphql.com/) and ensure proper SEO optimization on your frontend.

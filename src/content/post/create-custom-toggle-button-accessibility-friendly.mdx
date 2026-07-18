@@ -5,15 +5,23 @@ updatedDate: "Feb 20 2025"
 description: "Learn how to create a custom toggle button that is fully accessible, keyboard-friendly, and easy to implement using HTML, CSS, and JavaScript."
 tags:
   [
-    accessible toggle button,
-    custom toggle switch,
-    JavaScript toggle button,
-    keyboard-friendly toggle,
-    HTML CSS toggle,
-    aria-checked toggle,
-    UI accessibility,
+    "Accessible Toggle Button",
+    "Custom Toggle Switch",
+    "JavaScript Toggle Button",
+    "Keyboard-Friendly Toggle",
+    "HTML CSS Toggle",
+    "ARIA Checked Toggle",
+    "UI Accessibility",
   ]
 category: web-development
+ogFilename: toggle.ts
+ogLanguage: javascript
+ogCode: |-
+  function handleClick() {
+    initialState = !initialState;
+    toggleButton.classList.toggle("button-active");
+    // Update labels & ARIA...
+  }
 ---
 
 import ToggleButton from "~/assets/custom-toggle-button.webp";
@@ -24,7 +32,7 @@ import Picture from "~/components/Picture.astro";
 
 In this blog, we are going to create a custom toggle button with accessibility features to ensure a great experience for all users.
 
-You can find all the code in [my GitHub ](http://github.com/dipankarmaikap/custom-toggle-button) and feel free to use it.
+You can find all the code in [my GitHub](http://github.com/dipankarmaikap/custom-toggle-button) and feel free to use it.
 
 ## Steps to Create the Toggle Button:
 

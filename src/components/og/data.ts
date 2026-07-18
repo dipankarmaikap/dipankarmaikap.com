@@ -20,7 +20,7 @@ function handleClick() {
     language: "ts",
     code: `export function formatDate(date: Date) {
     // Format the date as "MM/DD/YYYY"
-  return new Intl.DateTimeFormat().format(date);
+  return date.toLocaleDateString();
 }`,
   },
 

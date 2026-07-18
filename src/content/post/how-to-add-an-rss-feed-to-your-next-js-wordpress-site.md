@@ -1,5 +1,5 @@
 ---
-title: "How to add an RSS feed to your Next.js WordPress site"
+title: "How to Add an RSS Feed to Your Next.js WordPress Site"
 pubDate: "April 28, 2021"
 updatedDate: "Feb 12 2025"
 description: "Learn how to generate an RSS feed for your Next.js WordPress site using Server-Side Rendering (SSR). Improve content distribution and SEO with dynamic RSS feeds and caching for better performance."
@@ -16,6 +16,14 @@ tags:
     "Content Syndication",
   ]
 category: headless-cms
+ogFilename: main.js
+ogLanguage: js
+ogCode: |-
+  export async function generateRSS() {
+    const posts = await getPosts();
+    // Convert posts to RSS XML...
+    return createRSS(posts);
+  }
 ---
 
 RSS feeds allow users to subscribe to website updates using feed readers, improving content distribution and engagement. They are especially useful for blogs, news sites, and content-heavy platforms.

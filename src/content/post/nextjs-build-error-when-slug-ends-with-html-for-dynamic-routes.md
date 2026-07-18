@@ -8,7 +8,7 @@ tags:
     "Next.js",
     "WordPress Migration",
     "SEO",
-    " Dynamic Routes",
+    "Dynamic Routes",
     "Static Site Generation",
   ]
 category: web-development
