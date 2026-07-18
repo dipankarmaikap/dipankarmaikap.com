@@ -10,6 +10,15 @@ export const transporter = createTransport({
   },
 });
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 interface MailOptions {
   name: string;
   email: string;
@@ -17,15 +26,15 @@ interface MailOptions {
 }
 export function getMailOptions({ name, email, message }: MailOptions) {
   return {
-    from: `"${name}" <${import.meta.env.SMTP_USER}>`,
-    to: import.meta.env.MY_EMAIL, // Your email to receive messages
-    replyTo: email, // Allows you to reply directly to the sender
+    from: `"dipankarmaikap.com" <${import.meta.env.SMTP_USER}>`,
+    to: import.meta.env.MY_EMAIL,
+    replyTo: email,
     subject: "New Contact Form Submission",
     html: `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <p>${escapeHtml(message)}</p>
       `,
   };
 }
