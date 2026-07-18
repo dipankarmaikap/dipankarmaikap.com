@@ -21,6 +21,11 @@
       id="email"
     />
   </div>
+  <div aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;pointer-events:none">
+    <label for="website">Website</label>
+    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="timestamp" id="formTimestamp" />
   <div class="form-group">
     <label class="flex" for="message">Message</label>
     <textarea
@@ -56,9 +61,28 @@
   ) as HTMLFormElement;
   const errorMsgDiv = document.getElementById("errorMsg") as HTMLFormElement;
   const sucessMsgDiv = document.getElementById("sucessMsg") as HTMLDivElement;
+
+  const timestampInput = document.getElementById(
+    "formTimestamp"
+  ) as HTMLInputElement;
+  if (timestampInput) {
+    timestampInput.value = String(Date.now());
+  }
+
   createLinkForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearErrors(createLinkForm);
+
+    const honeypot = document.getElementById("website") as HTMLInputElement;
+    if (honeypot?.value) return;
+
+    const loadTime = Number(timestampInput?.value);
+    if (loadTime && Date.now() - loadTime < 3000) {
+      errorMsgDiv.innerHTML =
+        '<p class="error-message m-2">Please wait a moment before submitting.</p>';
+      return;
+    }
+
     const formData = new FormData(event.target as HTMLFormElement);
     const submitButton = createLinkForm.querySelector(
       "button[type=submit]"
