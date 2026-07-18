@@ -5,13 +5,13 @@ updatedDate: "Sep 05 2025"
 description: "Learn how to secure your headless WordPress site by protecting the WPGraphQL API. This guide covers authentication, application passwords, and best practices to lock down the /graphql endpoint."
 tags:
   [
-    "headless WordPress security",
-    "WPGraphQL authentication",
-    "secure WordPress GraphQL",
-    "protect WordPress API",
-    "WordPress application passwords",
-    "headless WordPress best practices",
-    "WordPress GraphQL endpoint",
+    "Headless WordPress Security",
+    "WPGraphQL Authentication",
+    "Secure WordPress GraphQL",
+    "Protect WordPress API",
+    "WordPress Application Passwords",
+    "Headless WordPress Best Practices",
+    "WordPress GraphQL Endpoint",
   ]
 category: wordpress
 ogFilename: functions.php

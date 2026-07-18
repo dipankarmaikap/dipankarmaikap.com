@@ -5,7 +5,7 @@ updatedDate: "Feb 12 2025"
 description: "Launching my web development blog! Sharing my coding journey, solutions to coding challenges, and insights on learning new technologies."
 tags:
   [
-    "web development",
+    "Web Development",
     "Coding Journey",
     "Self-Taught Developer",
     "Learning to Code",
